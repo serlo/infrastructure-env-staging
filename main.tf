@@ -108,7 +108,7 @@ module "gcloud_postgres" {
 }
 
 module "athene2_dbsetup" {
-  source                    = "github.com/serlo/infrastructure-modules-serlo.org.git//athene2_dbsetup?ref=v1.0.0"
+  source                    = "github.com/serlo/infrastructure-modules-serlo.org.git//athene2_dbsetup?ref=653d3db56b18241942105eac1a29d91a2a69e7be"
   namespace                 = local.athene2_namespace
   database_password_default = var.athene2_database_password_default
   database_host             = module.gcloud_mysql.database_private_ip_address
@@ -120,14 +120,14 @@ module "athene2_dbsetup" {
 }
 
 module "legacy-editor-renderer" {
-  source       = "github.com/serlo/infrastructure-modules-serlo.org.git//legacy-editor-renderer?ref=v1.0.0"
+  source       = "github.com/serlo/infrastructure-modules-serlo.org.git//legacy-editor-renderer?ref=653d3db56b18241942105eac1a29d91a2a69e7be"
   image        = local.legacy-editor-renderer_image
   namespace    = kubernetes_namespace.athene2_namespace.metadata.0.name
   app_replicas = 1
 }
 
 module "editor-renderer" {
-  source       = "github.com/serlo/infrastructure-modules-serlo.org.git//editor-renderer?ref=v1.0.0"
+  source       = "github.com/serlo/infrastructure-modules-serlo.org.git//editor-renderer?ref=653d3db56b18241942105eac1a29d91a2a69e7be"
   image        = local.editor-renderer_image
   namespace    = kubernetes_namespace.athene2_namespace.metadata.0.name
   app_replicas = 1
@@ -148,7 +148,7 @@ module "varnish" {
 }
 
 module "athene2" {
-  source      = "github.com/serlo/infrastructure-modules-serlo.org.git//athene2?ref=v1.0.0"
+  source      = "github.com/serlo/infrastructure-modules-serlo.org.git//athene2?ref=653d3db56b18241942105eac1a29d91a2a69e7be"
   httpd_image = local.athene2_httpd_image
 
   php_image                 = local.athene2_php_image
