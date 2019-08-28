@@ -13,8 +13,8 @@ locals {
   //cluster_machine_type = "n1-highcpu-8"
   cluster_machine_type = "n1-standard-2"
 
-  athene2_httpd_image               = "eu.gcr.io/serlo-shared/serlo-org-httpd:2.0.2"
-  athene2_php_image                 = "eu.gcr.io/serlo-shared/serlo-org-php:2.0.2"
+  athene2_httpd_image               = "eu.gcr.io/serlo-shared/serlo-org-httpd:2.0.3"
+  athene2_php_image                 = "eu.gcr.io/serlo-shared/serlo-org-php:2.0.3"
   athene2_php_definitions-file_path = "secrets/athene2/definitions.staging.php"
 
   athene2_database_instance_name = "${local.project}-mysql-instance-10072019-1"
