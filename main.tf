@@ -22,7 +22,7 @@ locals {
   athene2_database_instance_name = "${local.project}-mysql-instance-10072019-1"
 
   legacy-editor-renderer_image = "eu.gcr.io/serlo-shared/serlo-org-legacy-editor-renderer:1.0.0"
-  editor-renderer_image        = "eu.gcr.io/serlo-shared/serlo-org-editor-renderer:2.0.4"
+  editor-renderer_image        = "eu.gcr.io/serlo-shared/serlo-org-editor-renderer:2.0.5"
 
   kpi_grafana_admin_password = var.kpi_grafana_admin_password
 
@@ -110,7 +110,7 @@ module "gcloud_postgres" {
 }
 
 module "athene2_dbsetup" {
-  source                    = "github.com/serlo/infrastructure-modules-serlo.org.git//athene2_dbsetup?ref=ddbd93b26870cb99f10a63d4a43962b265300bef"
+  source                    = "github.com/serlo/infrastructure-modules-serlo.org.git//athene2_dbsetup?ref=2738e24fff15d5be246c2533da27cbfa3cb12a71"
   namespace                 = local.athene2_namespace
   database_password_default = var.athene2_database_password_default
   database_host             = module.gcloud_mysql.database_private_ip_address
@@ -122,14 +122,14 @@ module "athene2_dbsetup" {
 }
 
 module "legacy-editor-renderer" {
-  source       = "github.com/serlo/infrastructure-modules-serlo.org.git//legacy-editor-renderer?ref=ddbd93b26870cb99f10a63d4a43962b265300bef"
+  source       = "github.com/serlo/infrastructure-modules-serlo.org.git//legacy-editor-renderer?ref=2738e24fff15d5be246c2533da27cbfa3cb12a71"
   image        = local.legacy-editor-renderer_image
   namespace    = kubernetes_namespace.athene2_namespace.metadata.0.name
   app_replicas = 1
 }
 
 module "editor-renderer" {
-  source       = "github.com/serlo/infrastructure-modules-serlo.org.git//editor-renderer?ref=ddbd93b26870cb99f10a63d4a43962b265300bef"
+  source       = "github.com/serlo/infrastructure-modules-serlo.org.git//editor-renderer?ref=2738e24fff15d5be246c2533da27cbfa3cb12a71"
   image        = local.editor-renderer_image
   namespace    = kubernetes_namespace.athene2_namespace.metadata.0.name
   app_replicas = 1
@@ -150,7 +150,7 @@ module "varnish" {
 }
 
 module "athene2" {
-  source                  = "github.com/serlo/infrastructure-modules-serlo.org.git//athene2?ref=ddbd93b26870cb99f10a63d4a43962b265300bef"
+  source                  = "github.com/serlo/infrastructure-modules-serlo.org.git//athene2?ref=2738e24fff15d5be246c2533da27cbfa3cb12a71"
   httpd_image             = local.athene2_httpd_image
   notifications-job_image = local.athene2_notifications-job_image
 
