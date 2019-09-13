@@ -22,7 +22,7 @@ locals {
   athene2_database_instance_name = "${local.project}-mysql-instance-10072019-1"
 
   legacy-editor-renderer_image = "eu.gcr.io/serlo-shared/serlo-org-legacy-editor-renderer:1.0.0"
-  editor-renderer_image        = "eu.gcr.io/serlo-shared/serlo-org-editor-renderer:2.0.5"
+  editor-renderer_image        = "eu.gcr.io/serlo-shared/serlo-org-editor-renderer:2.0.6"
 
   kpi_grafana_admin_password = var.kpi_grafana_admin_password
 
