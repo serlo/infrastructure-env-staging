@@ -7,10 +7,8 @@ locals {
 
   credentials_path = "secrets/serlo-staging-terraform-15240e38ec22.json"
   service_account  = "terraform@serlo-staging.iam.gserviceaccount.com"
+  region           = "europe-west3"
 
-  region = "europe-west3"
-
-  //cluster_machine_type = "n1-highcpu-8"
   cluster_machine_type = "n1-standard-2"
 
   athene2_httpd_image               = "eu.gcr.io/serlo-shared/serlo-org-httpd:3.1.0"
@@ -38,12 +36,20 @@ locals {
 #####################################################################
 # providers
 #####################################################################
+provider "cloudflare" {
+  version = "~> 2.0"
+  email   = var.cloudflare_email
+  api_key = var.cloudflare_token
+}
+
 provider "google" {
+  version     = "~> 2.18"
   project     = "${local.project}"
   credentials = "${file("${local.credentials_path}")}"
 }
 
 provider "google-beta" {
+  version     = "~> 2.18"
   project     = "${local.project}"
   credentials = "${file("${local.credentials_path}")}"
 }
@@ -58,30 +64,40 @@ provider "kubernetes" {
   cluster_ca_certificate = base64decode(module.gcloud.cluster_ca_certificate)
 }
 
-provider "cloudflare" {
-  email = var.cloudflare_email
-  token = var.cloudflare_token
+provider "null" {
+  version = "~> 2.1"
 }
 
-provider "template" {}
+provider "random" {
+  version = "~> 2.2"
+}
+
+provider "template" {
+  version = "~> 2.1"
+}
 
 #####################################################################
 # modules
 #####################################################################
 module "gcloud" {
-  source                   = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud?ref=v1.0.0"
+  source                   = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud?ref=81e0067cd2f36b36718f77b9fb0d1099460641b5"
   project                  = local.project
   clustername              = "${local.project}-cluster"
-  zone                     = "europe-west3-a"
+  location                 = "europe-west3-a"
   region                   = local.region
   machine_type             = local.cluster_machine_type
   issue_client_certificate = true
   logging_service          = "logging.googleapis.com/kubernetes"
   monitoring_service       = "monitoring.googleapis.com/kubernetes"
+
+  providers = {
+    google      = "google"
+    google-beta = "google-beta"
+  }
 }
 
 module "gcloud_mysql" {
-  source                     = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_mysql?ref=v1.0.0"
+  source                     = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_mysql?ref=81e0067cd2f36b36718f77b9fb0d1099460641b5"
   database_instance_name     = local.athene2_database_instance_name
   database_connection_name   = "${local.project}:${local.region}:${local.athene2_database_instance_name}"
   database_region            = local.region
@@ -91,10 +107,15 @@ module "gcloud_mysql" {
   private_ip_address_range   = module.gcloud.private_ip_address_range
   database_password_default  = var.athene2_database_password_default
   database_password_readonly = var.athene2_database_password_readonly
+
+  providers = {
+    google      = "google"
+    google-beta = "google-beta"
+  }
 }
 
 module "gcloud_postgres" {
-  source                   = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_postgres?ref=v1.0.0"
+  source                   = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_postgres?ref=81e0067cd2f36b36718f77b9fb0d1099460641b5"
   database_instance_name   = local.kpi_database_instance_name
   database_connection_name = "${local.project}:${local.region}:${local.kpi_database_instance_name}"
   database_region          = local.region
@@ -107,6 +128,11 @@ module "gcloud_postgres" {
   database_password_default  = var.kpi_kpi_database_password_default
   database_username_readonly = module.kpi.kpi_database_username_readonly
   database_password_readonly = var.kpi_kpi_database_password_readonly
+
+  providers = {
+    google      = "google"
+    google-beta = "google-beta"
+  }
 }
 
 module "athene2_dbsetup" {
@@ -119,6 +145,11 @@ module "athene2_dbsetup" {
   #gcloud_service_account_name = module.gcloud_dbdump_reader.account_name
   gcloud_service_account_key  = ""
   gcloud_service_account_name = ""
+
+  providers = {
+    kubernetes = "kubernetes"
+    null       = "null"
+  }
 }
 
 module "legacy-editor-renderer" {
@@ -126,6 +157,10 @@ module "legacy-editor-renderer" {
   image        = local.legacy-editor-renderer_image
   namespace    = kubernetes_namespace.athene2_namespace.metadata.0.name
   app_replicas = 1
+
+  providers = {
+    kubernetes = "kubernetes"
+  }
 }
 
 module "editor-renderer" {
@@ -133,10 +168,14 @@ module "editor-renderer" {
   image        = local.editor-renderer_image
   namespace    = kubernetes_namespace.athene2_namespace.metadata.0.name
   app_replicas = 1
+
+  providers = {
+    kubernetes = "kubernetes"
+  }
 }
 
 module "varnish" {
-  source         = "github.com/serlo/infrastructure-modules-shared.git//varnish?ref=v1.0.0"
+  source         = "github.com/serlo/infrastructure-modules-shared.git//varnish?ref=5ce903f3b00082ac99b5a591914c3004d01fe7b2"
   namespace      = kubernetes_namespace.athene2_namespace.metadata.0.name
   app_replicas   = 1
   backend_ip     = module.athene2.athene2_service_ip
@@ -147,6 +186,11 @@ module "varnish" {
   resources_limits_memory   = "100Mi"
   resources_requests_cpu    = "50m"
   resources_requests_memory = "100Mi"
+
+  providers = {
+    kubernetes = "kubernetes"
+    template   = "template"
+  }
 }
 
 module "athene2" {
@@ -188,6 +232,12 @@ module "athene2" {
   enable_basic_auth = true
   enable_cronjobs   = true
   enable_mail_mock  = true
+
+  providers = {
+    kubernetes = "kubernetes"
+    random     = "random"
+    template   = "template"
+  }
 }
 
 module "kpi" {
@@ -210,18 +260,27 @@ module "kpi" {
 }
 
 module "ingress-nginx" {
-  source               = "github.com/serlo/infrastructure-modules-shared.git//ingress-nginx?ref=v1.0.0"
+  source               = "github.com/serlo/infrastructure-modules-shared.git//ingress-nginx?ref=5ce903f3b00082ac99b5a591914c3004d01fe7b2"
   namespace            = kubernetes_namespace.ingress_nginx_namespace.metadata.0.name
   ip                   = module.gcloud.staticip_regional_address
   nginx_image          = "quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.24.1"
   tls_certificate_path = local.ingress_tls_certificate_path
   tls_key_path         = local.ingress_tls_key_path
+
+  providers = {
+    kubernetes = "kubernetes"
+  }
 }
 
 module "cloudflare" {
-  source = "github.com/serlo/infrastructure-modules-env-shared.git//cloudflare?ref=v1.0.0"
-  domain = local.domain
-  ip     = module.gcloud.staticip_regional_address
+  source  = "github.com/serlo/infrastructure-modules-env-shared.git//cloudflare?ref=0013c09924b3a06c5cc48d77f65cce72193b5633"
+  domain  = local.domain
+  ip      = module.gcloud.staticip_regional_address
+  zone_id = "ffbc61a7597fd0177bbeb8fff6fa31c8"
+
+  providers = {
+    cloudflare = "cloudflare"
+  }
 }
 
 #####################################################################
