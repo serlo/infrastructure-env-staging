@@ -80,7 +80,7 @@ provider "template" {
 # modules
 #####################################################################
 module "gcloud" {
-  source                   = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud?ref=81e0067cd2f36b36718f77b9fb0d1099460641b5"
+  source                   = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud?ref=288d47f68171c91db8ae79234669d91bf7adbe2d"
   project                  = local.project
   clustername              = "${local.project}-cluster"
   location                 = "europe-west3-a"
@@ -97,7 +97,7 @@ module "gcloud" {
 }
 
 module "gcloud_mysql" {
-  source                     = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_mysql?ref=81e0067cd2f36b36718f77b9fb0d1099460641b5"
+  source                     = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_mysql?ref=288d47f68171c91db8ae79234669d91bf7adbe2d"
   database_instance_name     = local.athene2_database_instance_name
   database_connection_name   = "${local.project}:${local.region}:${local.athene2_database_instance_name}"
   database_region            = local.region
@@ -115,7 +115,7 @@ module "gcloud_mysql" {
 }
 
 module "gcloud_postgres" {
-  source                   = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_postgres?ref=81e0067cd2f36b36718f77b9fb0d1099460641b5"
+  source                   = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_postgres?ref=288d47f68171c91db8ae79234669d91bf7adbe2d"
   database_instance_name   = local.kpi_database_instance_name
   database_connection_name = "${local.project}:${local.region}:${local.kpi_database_instance_name}"
   database_region          = local.region
@@ -136,7 +136,7 @@ module "gcloud_postgres" {
 }
 
 module "athene2_dbsetup" {
-  source                    = "github.com/serlo/infrastructure-modules-serlo.org.git//athene2_dbsetup?ref=2738e24fff15d5be246c2533da27cbfa3cb12a71"
+  source                    = "github.com/serlo/infrastructure-modules-serlo.org.git//athene2_dbsetup?ref=463c7b37dcdde4dc89f45fd40925a0f0ea7c00d2"
   namespace                 = local.athene2_namespace
   database_password_default = var.athene2_database_password_default
   database_host             = module.gcloud_mysql.database_private_ip_address
@@ -153,7 +153,7 @@ module "athene2_dbsetup" {
 }
 
 module "legacy-editor-renderer" {
-  source       = "github.com/serlo/infrastructure-modules-serlo.org.git//legacy-editor-renderer?ref=2738e24fff15d5be246c2533da27cbfa3cb12a71"
+  source       = "github.com/serlo/infrastructure-modules-serlo.org.git//legacy-editor-renderer?ref=463c7b37dcdde4dc89f45fd40925a0f0ea7c00d2"
   image        = local.legacy-editor-renderer_image
   namespace    = kubernetes_namespace.athene2_namespace.metadata.0.name
   app_replicas = 1
@@ -164,7 +164,7 @@ module "legacy-editor-renderer" {
 }
 
 module "editor-renderer" {
-  source       = "github.com/serlo/infrastructure-modules-serlo.org.git//editor-renderer?ref=2738e24fff15d5be246c2533da27cbfa3cb12a71"
+  source       = "github.com/serlo/infrastructure-modules-serlo.org.git//editor-renderer?ref=463c7b37dcdde4dc89f45fd40925a0f0ea7c00d2"
   image        = local.editor-renderer_image
   namespace    = kubernetes_namespace.athene2_namespace.metadata.0.name
   app_replicas = 1
@@ -194,7 +194,7 @@ module "varnish" {
 }
 
 module "athene2" {
-  source                  = "github.com/serlo/infrastructure-modules-serlo.org.git//athene2?ref=2738e24fff15d5be246c2533da27cbfa3cb12a71"
+  source                  = "github.com/serlo/infrastructure-modules-serlo.org.git//athene2?ref=463c7b37dcdde4dc89f45fd40925a0f0ea7c00d2"
   httpd_image             = local.athene2_httpd_image
   notifications-job_image = local.athene2_notifications-job_image
 
@@ -320,7 +320,8 @@ resource "kubernetes_ingress" "athene2_ingress" {
     name      = "athene2-ingress"
     namespace = kubernetes_namespace.athene2_namespace.metadata.0.name
 
-    annotations = { "kubernetes.io/ingress.class" = "nginx",
+    annotations = {
+      "kubernetes.io/ingress.class"             = "nginx",
       "nginx.ingress.kubernetes.io/auth-type"   = "basic",
       "nginx.ingress.kubernetes.io/auth-secret" = "basic-auth-ingress-secret",
       "nginx.ingress.kubernetes.io/auth-realm"  = "Authentication Required"
