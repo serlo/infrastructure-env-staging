@@ -11,16 +11,20 @@ locals {
 
   cluster_machine_type = "n1-standard-2"
 
-  athene2_httpd_image               = "eu.gcr.io/serlo-shared/serlo-org-httpd:3.1.0"
-  athene2_php_image                 = "eu.gcr.io/serlo-shared/serlo-org-php:3.1.0"
+  serlo_org_images = {
+    server = {
+      httpd             = "eu.gcr.io/serlo-shared/serlo-org-httpd:3.3.4"
+      php               = "eu.gcr.io/serlo-shared/serlo-org-php:3.3.4"
+      notifications_job = "eu.gcr.io/serlo-shared/serlo-org-notifications-job:1.0.2"
+    }
+    editor_renderer        = "eu.gcr.io/serlo-shared/serlo-org-legacy-editor-renderer:1.0.0"
+    legacy_editor_renderer = "eu.gcr.io/serlo-shared/serlo-org-editor-renderer:2.0.9"
+    varnish                = "eu.gcr.io/serlo-shared/varnish:6.0"
+  }
+
   athene2_php_definitions-file_path = "secrets/athene2/definitions.staging.php"
 
-  athene2_notifications-job_image = "eu.gcr.io/serlo-shared/serlo-org-notifications-job:1.0.2"
-
   athene2_database_instance_name = "${local.project}-mysql-instance-10072019-1"
-
-  legacy-editor-renderer_image = "eu.gcr.io/serlo-shared/serlo-org-legacy-editor-renderer:1.0.0"
-  editor-renderer_image        = "eu.gcr.io/serlo-shared/serlo-org-editor-renderer:2.0.8"
 
   kpi_grafana_admin_password = var.kpi_grafana_admin_password
 
@@ -151,18 +155,14 @@ module "athene2_dbsetup" {
 }
 
 module "serlo_org" {
-  source = "github.com/serlo/infrastructure-modules-serlo.org.git//?ref=436e7d7ae36a55c6839645af51e99879bf8120a6"
+  source = "github.com/serlo/infrastructure-modules-serlo.org.git//?ref=3c22beaf999d156fb5083c6a0909a680955cb0f1"
 
   namespace         = kubernetes_namespace.serlo_org_namespace.metadata.0.name
   image_pull_policy = "IfNotPresent"
 
   server = {
     app_replicas = 1
-    images = {
-      httpd             = "eu.gcr.io/serlo-shared/serlo-org-httpd:3.1.0"
-      php               = "eu.gcr.io/serlo-shared/serlo-org-php:3.1.0"
-      notifications_job = "eu.gcr.io/serlo-shared/serlo-org-notifications-job:1.0.2"
-    }
+    images       = local.serlo_org_images.server
 
     domain                = local.domain
     definitions_file_path = local.athene2_php_definitions-file_path
@@ -188,22 +188,24 @@ module "serlo_org" {
       password = var.athene2_database_password_readonly
     }
 
-    upload_secret = file("secrets/serlo-org-6bab84a1b1a5.json")
+    upload_secret   = file("secrets/serlo-org-6bab84a1b1a5.json")
+    hydra_admin_uri = ""
+    feature_flags   = "['donation-banner' => true]"
   }
 
   editor_renderer = {
     app_replicas = 1
-    image        = "eu.gcr.io/serlo-shared/serlo-org-editor-renderer:2.0.9"
+    image        = local.serlo_org_images.editor_renderer
   }
 
   legacy_editor_renderer = {
     app_replicas = 1
-    image        = "eu.gcr.io/serlo-shared/serlo-org-legacy-editor-renderer:1.0.0"
+    image        = local.serlo_org_images.legacy_editor_renderer
   }
 
   varnish = {
     app_replicas = 1
-    image        = "eu.gcr.io/serlo-shared/varnish:6.0"
+    image        = local.serlo_org_images.varnish
   }
 
   providers = {
