@@ -138,7 +138,7 @@ module "gcloud_postgres" {
 }
 
 module "athene2_dbsetup" {
-  source                    = "github.com/serlo/infrastructure-modules-serlo.org.git//athene2_dbsetup?ref=436e7d7ae36a55c6839645af51e99879bf8120a6"
+  source                    = "github.com/serlo/infrastructure-modules-serlo.org.git//athene2_dbsetup?ref=5a81003433cbb37ff7fd64220f3176470234a50c"
   namespace                 = kubernetes_namespace.serlo_org_namespace.metadata.0.name
   database_password_default = var.athene2_database_password_default
   database_host             = module.gcloud_mysql.database_private_ip_address
