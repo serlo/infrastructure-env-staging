@@ -26,8 +26,6 @@ locals {
 
   athene2_database_instance_name = "${local.project}-mysql-instance-10072019-1"
   kpi_database_instance_name     = "${local.project}-postgres-instance-10072019-2"
-
-  kpi_database_username_default = "serlo"
 }
 
 #####################################################################
@@ -150,7 +148,7 @@ module "gcloud_postgres" {
 }
 
 module "serlo_org" {
-  source = "github.com/serlo/infrastructure-modules-serlo.org.git//?ref=3c22beaf999d156fb5083c6a0909a680955cb0f1"
+  source = "github.com/serlo/infrastructure-modules-serlo.org.git//?ref=3dcd8f2f62ea316aa25c4938e1577bf923cf6d71"
 
   namespace         = kubernetes_namespace.serlo_org_namespace.metadata.0.name
   image_pull_policy = "IfNotPresent"
@@ -162,6 +160,29 @@ module "serlo_org" {
     domain                = local.domain
     definitions_file_path = local.athene2_php_definitions-file_path
 
+    resources = {
+      httpd = {
+        limits = {
+          cpu    = "200m"
+          memory = "200Mi"
+        }
+        requests = {
+          cpu    = "100m"
+          memory = "100Mi"
+        }
+      }
+      php = {
+        limits = {
+          cpu    = "700m"
+          memory = "600Mi"
+        }
+        requests = {
+          cpu    = "400m"
+          memory = "200Mi"
+        }
+      }
+    }
+
     recaptcha = {
       key    = var.athene2_php_recaptcha_key
       secret = var.athene2_php_recaptcha_secret
@@ -170,7 +191,10 @@ module "serlo_org" {
     smtp_password = var.athene2_php_smtp_password
     mailchimp_key = var.athene2_php_newsletter_key
 
-    enable_tracking = var.athene2_php_tracking_switch
+    enable_tracking   = var.athene2_php_tracking_switch
+    enable_basic_auth = true
+    enable_cronjobs   = true
+    enable_mail_mock  = true
 
     database = {
       host     = module.gcloud_mysql.database_private_ip_address
@@ -184,7 +208,7 @@ module "serlo_org" {
     }
 
     upload_secret   = file("secrets/serlo-org-6bab84a1b1a5.json")
-    hydra_admin_uri = ""
+    hydra_admin_uri = module.hydra.admin_uri
     feature_flags   = "['donation-banner' => true]"
   }
 
@@ -201,6 +225,7 @@ module "serlo_org" {
   varnish = {
     app_replicas = 1
     image        = local.serlo_org_images.varnish
+    memory       = "100M"
   }
 
   providers = {
