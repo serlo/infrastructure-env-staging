@@ -13,8 +13,8 @@ locals {
 
   serlo_org_images = {
     server = {
-      httpd             = "eu.gcr.io/serlo-shared/serlo-org-httpd:3.3.4"
-      php               = "eu.gcr.io/serlo-shared/serlo-org-php:3.3.4"
+      httpd             = "eu.gcr.io/serlo-shared/serlo-org-httpd:3.5.1"
+      php               = "eu.gcr.io/serlo-shared/serlo-org-php:3.5.1"
       notifications_job = "eu.gcr.io/serlo-shared/serlo-org-notifications-job:1.0.2"
     }
     editor_renderer        = "eu.gcr.io/serlo-shared/serlo-org-legacy-editor-renderer:1.0.0"
@@ -25,14 +25,9 @@ locals {
   athene2_php_definitions-file_path = "secrets/athene2/definitions.staging.php"
 
   athene2_database_instance_name = "${local.project}-mysql-instance-10072019-1"
+  kpi_database_instance_name     = "${local.project}-postgres-instance-10072019-2"
 
-  kpi_grafana_admin_password = var.kpi_grafana_admin_password
-
-  kpi_database_instance_name    = "${local.project}-postgres-instance-10072019-2"
   kpi_database_username_default = "serlo"
-
-  ingress_tls_certificate_path = "secrets/serlo_org_selfsigned.crt"
-  ingress_tls_key_path         = "secrets/serlo_org_selfsigned.key"
 }
 
 #####################################################################
@@ -56,6 +51,19 @@ provider "google-beta" {
   credentials = "${file("${local.credentials_path}")}"
 }
 
+provider "helm" {
+  version = "~> 0.10"
+  kubernetes {
+    host     = module.gcloud.host
+    username = ""
+    password = ""
+
+    client_certificate     = base64decode(module.gcloud.client_certificate)
+    client_key             = base64decode(module.gcloud.client_key)
+    cluster_ca_certificate = base64decode(module.gcloud.cluster_ca_certificate)
+  }
+}
+
 provider "kubernetes" {
   version          = "~> 1.8"
   host             = "${module.gcloud.host}"
@@ -75,6 +83,10 @@ provider "random" {
 }
 
 provider "template" {
+  version = "~> 2.1"
+}
+
+provider "tls" {
   version = "~> 2.1"
 }
 
@@ -117,11 +129,11 @@ module "gcloud_mysql" {
 }
 
 module "gcloud_postgres" {
-  source                   = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_postgres?ref=15666ddbd5b93c74c28781fec90a7b03b99b6377"
+  source                   = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_postgres?ref=4834fc2bb1d4de1f89d06ecc6060d0e35da10b8e"
   database_instance_name   = local.kpi_database_instance_name
   database_connection_name = "${local.project}:${local.region}:${local.kpi_database_instance_name}"
   database_region          = local.region
-  database_name            = "kpi"
+  database_names           = ["kpi", "hydra"]
   database_private_network = module.gcloud.network
   private_ip_address_range = module.gcloud.private_ip_address_range
 
@@ -134,23 +146,6 @@ module "gcloud_postgres" {
   providers = {
     google      = "google"
     google-beta = "google-beta"
-  }
-}
-
-module "athene2_dbsetup" {
-  source                    = "github.com/serlo/infrastructure-modules-serlo.org.git//athene2_dbsetup?ref=5a81003433cbb37ff7fd64220f3176470234a50c"
-  namespace                 = kubernetes_namespace.serlo_org_namespace.metadata.0.name
-  database_password_default = var.athene2_database_password_default
-  database_host             = module.gcloud_mysql.database_private_ip_address
-  # currently disable dbsetup via shared bucket in staging.
-  # gcloud_service_account_key  = module.gcloud_dbdump_reader.account_key
-  # gcloud_service_account_name = module.gcloud_dbdump_reader.account_name
-  gcloud_service_account_key  = ""
-  gcloud_service_account_name = ""
-
-  providers = {
-    kubernetes = "kubernetes"
-    null       = "null"
   }
 }
 
@@ -215,6 +210,23 @@ module "serlo_org" {
   }
 }
 
+module "athene2_dbsetup" {
+  source                    = "github.com/serlo/infrastructure-modules-serlo.org.git//athene2_dbsetup?ref=5a81003433cbb37ff7fd64220f3176470234a50c"
+  namespace                 = kubernetes_namespace.serlo_org_namespace.metadata.0.name
+  database_password_default = var.athene2_database_password_default
+  database_host             = module.gcloud_mysql.database_private_ip_address
+  # currently disable dbsetup via shared bucket in staging.
+  # gcloud_service_account_key  = module.gcloud_dbdump_reader.account_key
+  # gcloud_service_account_name = module.gcloud_dbdump_reader.account_name
+  gcloud_service_account_key  = ""
+  gcloud_service_account_name = ""
+
+  providers = {
+    kubernetes = "kubernetes"
+    null       = "null"
+  }
+}
+
 module "kpi" {
   source = "github.com/serlo/infrastructure-modules-kpi.git//kpi?ref=v1.3.0"
   domain = local.domain
@@ -235,20 +247,20 @@ module "kpi" {
 }
 
 module "ingress-nginx" {
-  source               = "github.com/serlo/infrastructure-modules-shared.git//ingress-nginx?ref=5ce903f3b00082ac99b5a591914c3004d01fe7b2"
-  namespace            = kubernetes_namespace.ingress_nginx_namespace.metadata.0.name
-  ip                   = module.gcloud.staticip_regional_address
-  nginx_image          = "quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.24.1"
-  tls_certificate_path = local.ingress_tls_certificate_path
-  tls_key_path         = local.ingress_tls_key_path
+  source      = "github.com/serlo/infrastructure-modules-shared.git//ingress-nginx?ref=51ec5b16d2d39171c88cf033ba3f7dcef22a0e9b"
+  namespace   = kubernetes_namespace.ingress_nginx_namespace.metadata.0.name
+  ip          = module.gcloud.staticip_regional_address
+  domain      = "*.${local.domain}"
+  nginx_image = "quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.24.1"
 
   providers = {
     kubernetes = "kubernetes"
+    tls        = "tls"
   }
 }
 
 module "cloudflare" {
-  source  = "github.com/serlo/infrastructure-modules-env-shared.git//cloudflare?ref=0013c09924b3a06c5cc48d77f65cce72193b5633"
+  source  = "github.com/serlo/infrastructure-modules-env-shared.git//cloudflare?ref=36d906c2b2a665836714babc9cdd7d4c7a2b5143"
   domain  = local.domain
   ip      = module.gcloud.staticip_regional_address
   zone_id = "ffbc61a7597fd0177bbeb8fff6fa31c8"
@@ -258,10 +270,49 @@ module "cloudflare" {
   }
 }
 
+module "hydra" {
+  source      = "github.com/serlo/infrastructure-modules-shared.git//hydra?ref=51ec5b16d2d39171c88cf033ba3f7dcef22a0e9b"
+  dsn         = "postgres://${module.kpi.kpi_database_username_default}:${var.kpi_kpi_database_password_default}@${module.gcloud_postgres.database_private_ip_address}/hydra"
+  url_login   = "https://de.${local.domain}/auth/hydra/login"
+  url_consent = "https://de.${local.domain}/auth/hydra/consent"
+  host        = "hydra.${local.domain}"
+  namespace   = kubernetes_namespace.hydra_namespace.metadata.0.name
+
+  providers = {
+    helm       = "helm"
+    kubernetes = "kubernetes"
+    random     = "random"
+    template   = "template"
+    tls        = "tls"
+  }
+}
+
+module "rocket-chat" {
+  source = "github.com/serlo/infrastructure-modules-shared.git//rocket-chat?ref=603e5f01190f19ab47f1fa13f40f4e053b962c1e"
+
+  host      = "community.${local.domain}"
+  namespace = kubernetes_namespace.community_namespace.metadata.0.name
+  image_tag = "2.2.1"
+
+  mongodump = {
+    image         = "eu.gcr.io/serlo-shared/mongodb-tools-base:1.0.1"
+    schedule      = "0 0 * * *"
+    bucket_prefix = local.project
+  }
+
+  smtp_password = var.athene2_php_smtp_password
+
+  providers = {
+    google   = "google"
+    helm     = "helm"
+    random   = "random"
+    template = "template"
+  }
+}
+
 #####################################################################
 # ingress
 #####################################################################
-
 resource "kubernetes_ingress" "kpi_ingress" {
   metadata {
     name      = "kpi-ingress"
@@ -335,6 +386,18 @@ resource "kubernetes_namespace" "serlo_org_namespace" {
 resource "kubernetes_namespace" "kpi_namespace" {
   metadata {
     name = "kpi"
+  }
+}
+
+resource "kubernetes_namespace" "community_namespace" {
+  metadata {
+    name = "community"
+  }
+}
+
+resource "kubernetes_namespace" "hydra_namespace" {
+  metadata {
+    name = "hydra"
   }
 }
 
