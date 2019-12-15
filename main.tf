@@ -11,16 +11,17 @@ locals {
 
   cluster_machine_type = "n1-standard-2"
 
-  serlo_org_images = {
+  serlo_org_image_tags = {
     server = {
-      httpd             = "eu.gcr.io/serlo-shared/serlo-org-httpd:3.5.3"
-      php               = "eu.gcr.io/serlo-shared/serlo-org-php:3.5.3"
-      notifications_job = "eu.gcr.io/serlo-shared/serlo-org-notifications-job:1.0.2"
+      httpd             = "4.2.1"
+      php               = "4.2.1"
+      notifications_job = "1.0.2"
     }
-    editor_renderer        = "eu.gcr.io/serlo-shared/serlo-org-editor-renderer:2.0.9"
-    legacy_editor_renderer = "eu.gcr.io/serlo-shared/serlo-org-legacy-editor-renderer:1.0.0"
-    varnish                = "eu.gcr.io/serlo-shared/varnish:6.0"
+    editor_renderer        = "2.0.9"
+    legacy_editor_renderer = "1.0.0"
+    frontend               = "0.1.4"
   }
+  varnish_image = "eu.gcr.io/serlo-shared/varnish:6.0"
 
   athene2_php_definitions-file_path = "secrets/athene2/definitions.staging.php"
 
@@ -148,14 +149,14 @@ module "gcloud_postgres" {
 }
 
 module "serlo_org" {
-  source = "github.com/serlo/infrastructure-modules-serlo.org.git//?ref=3dcd8f2f62ea316aa25c4938e1577bf923cf6d71"
+  source = "github.com/serlo/infrastructure-modules-serlo.org.git//?ref=9fe0c43443d40c74b1d11fa98da8a64a28ed1003"
 
   namespace         = kubernetes_namespace.serlo_org_namespace.metadata.0.name
   image_pull_policy = "IfNotPresent"
 
   server = {
     app_replicas = 1
-    images       = local.serlo_org_images.server
+    image_tags   = local.serlo_org_image_tags.server
 
     domain                = local.domain
     definitions_file_path = local.athene2_php_definitions-file_path
@@ -214,17 +215,22 @@ module "serlo_org" {
 
   editor_renderer = {
     app_replicas = 1
-    image        = local.serlo_org_images.editor_renderer
+    image_tag    = local.serlo_org_image_tags.editor_renderer
   }
 
   legacy_editor_renderer = {
     app_replicas = 1
-    image        = local.serlo_org_images.legacy_editor_renderer
+    image_tag    = local.serlo_org_image_tags.legacy_editor_renderer
+  }
+
+  frontend = {
+    app_replicas = 1
+    image_tag    = local.serlo_org_image_tags.frontend
   }
 
   varnish = {
     app_replicas = 1
-    image        = local.serlo_org_images.varnish
+    image        = local.varnish_image
     memory       = "100M"
   }
 
@@ -236,7 +242,7 @@ module "serlo_org" {
 }
 
 module "athene2_dbsetup" {
-  source                    = "github.com/serlo/infrastructure-modules-serlo.org.git//athene2_dbsetup?ref=5a81003433cbb37ff7fd64220f3176470234a50c"
+  source                    = "github.com/serlo/infrastructure-modules-serlo.org.git//athene2_dbsetup?ref=9fe0c43443d40c74b1d11fa98da8a64a28ed1003"
   namespace                 = kubernetes_namespace.serlo_org_namespace.metadata.0.name
   database_password_default = var.athene2_database_password_default
   database_host             = module.gcloud_mysql.database_private_ip_address
@@ -272,7 +278,7 @@ module "kpi" {
 }
 
 module "ingress-nginx" {
-  source      = "github.com/serlo/infrastructure-modules-shared.git//ingress-nginx?ref=51ec5b16d2d39171c88cf033ba3f7dcef22a0e9b"
+  source      = "github.com/serlo/infrastructure-modules-shared.git//ingress-nginx?ref=86fa9688de6dbde14799c484ca5de655df51c12d"
   namespace   = kubernetes_namespace.ingress_nginx_namespace.metadata.0.name
   ip          = module.gcloud.staticip_regional_address
   domain      = "*.${local.domain}"
@@ -296,7 +302,7 @@ module "cloudflare" {
 }
 
 module "hydra" {
-  source      = "github.com/serlo/infrastructure-modules-shared.git//hydra?ref=51ec5b16d2d39171c88cf033ba3f7dcef22a0e9b"
+  source      = "github.com/serlo/infrastructure-modules-shared.git//hydra?ref=86fa9688de6dbde14799c484ca5de655df51c12d"
   dsn         = "postgres://${module.kpi.kpi_database_username_default}:${var.kpi_kpi_database_password_default}@${module.gcloud_postgres.database_private_ip_address}/hydra"
   url_login   = "https://de.${local.domain}/auth/hydra/login"
   url_consent = "https://de.${local.domain}/auth/hydra/consent"
@@ -313,7 +319,7 @@ module "hydra" {
 }
 
 module "rocket-chat" {
-  source = "github.com/serlo/infrastructure-modules-shared.git//rocket-chat?ref=603e5f01190f19ab47f1fa13f40f4e053b962c1e"
+  source = "github.com/serlo/infrastructure-modules-shared.git//rocket-chat?ref=86fa9688de6dbde14799c484ca5de655df51c12d"
 
   host      = "community.${local.domain}"
   namespace = kubernetes_namespace.community_namespace.metadata.0.name
