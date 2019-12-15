@@ -40,14 +40,14 @@ provider "cloudflare" {
 
 provider "google" {
   version     = "~> 2.18"
-  project     = "${local.project}"
-  credentials = "${file("${local.credentials_path}")}"
+  project     = local.project
+  credentials = file("${local.credentials_path}")
 }
 
 provider "google-beta" {
   version     = "~> 2.18"
-  project     = "${local.project}"
-  credentials = "${file("${local.credentials_path}")}"
+  project     = local.project
+  credentials = file("${local.credentials_path}")
 }
 
 provider "helm" {
@@ -65,7 +65,7 @@ provider "helm" {
 
 provider "kubernetes" {
   version          = "~> 1.8"
-  host             = "${module.gcloud.host}"
+  host             = module.gcloud.host
   load_config_file = false
 
   client_certificate     = base64decode(module.gcloud.client_certificate)
@@ -93,7 +93,7 @@ provider "tls" {
 # modules
 #####################################################################
 module "gcloud" {
-  source                   = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud?ref=15666ddbd5b93c74c28781fec90a7b03b99b6377"
+  source                   = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud?ref=193c415dc00b0a40e1790ad224864d3df6cfba3e"
   project                  = local.project
   clustername              = "${local.project}-cluster"
   location                 = "europe-west3-a"
@@ -104,13 +104,14 @@ module "gcloud" {
   monitoring_service       = "monitoring.googleapis.com/kubernetes"
 
   providers = {
-    google      = "google"
-    google-beta = "google-beta"
+    google      = google
+    google-beta = google-beta
+    kubernetes  = kubernetes
   }
 }
 
 module "gcloud_mysql" {
-  source                     = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_mysql?ref=15666ddbd5b93c74c28781fec90a7b03b99b6377"
+  source                     = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_mysql?ref=193c415dc00b0a40e1790ad224864d3df6cfba3e"
   database_instance_name     = local.athene2_database_instance_name
   database_connection_name   = "${local.project}:${local.region}:${local.athene2_database_instance_name}"
   database_region            = local.region
@@ -122,13 +123,13 @@ module "gcloud_mysql" {
   database_password_readonly = var.athene2_database_password_readonly
 
   providers = {
-    google      = "google"
-    google-beta = "google-beta"
+    google      = google
+    google-beta = google-beta
   }
 }
 
 module "gcloud_postgres" {
-  source                   = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_postgres?ref=4834fc2bb1d4de1f89d06ecc6060d0e35da10b8e"
+  source                   = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_postgres?ref=193c415dc00b0a40e1790ad224864d3df6cfba3e"
   database_instance_name   = local.kpi_database_instance_name
   database_connection_name = "${local.project}:${local.region}:${local.kpi_database_instance_name}"
   database_region          = local.region
@@ -143,8 +144,8 @@ module "gcloud_postgres" {
   database_password_readonly = var.kpi_kpi_database_password_readonly
 
   providers = {
-    google      = "google"
-    google-beta = "google-beta"
+    google      = google
+    google-beta = google-beta
   }
 }
 
@@ -235,9 +236,9 @@ module "serlo_org" {
   }
 
   providers = {
-    kubernetes = "kubernetes"
-    random     = "random"
-    template   = "template"
+    kubernetes = kubernetes
+    random     = random
+    template   = template
   }
 }
 
@@ -253,8 +254,8 @@ module "athene2_dbsetup" {
   gcloud_service_account_name = ""
 
   providers = {
-    kubernetes = "kubernetes"
-    null       = "null"
+    kubernetes = kubernetes
+    null       = null
   }
 }
 
@@ -285,19 +286,19 @@ module "ingress-nginx" {
   nginx_image = "quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.24.1"
 
   providers = {
-    kubernetes = "kubernetes"
-    tls        = "tls"
+    kubernetes = kubernetes
+    tls        = tls
   }
 }
 
 module "cloudflare" {
-  source  = "github.com/serlo/infrastructure-modules-env-shared.git//cloudflare?ref=36d906c2b2a665836714babc9cdd7d4c7a2b5143"
+  source  = "github.com/serlo/infrastructure-modules-env-shared.git//cloudflare?ref=5175dfff7cc6a52d85cc66ae8c690c67f5539200"
   domain  = local.domain
   ip      = module.gcloud.staticip_regional_address
   zone_id = "ffbc61a7597fd0177bbeb8fff6fa31c8"
 
   providers = {
-    cloudflare = "cloudflare"
+    cloudflare = cloudflare
   }
 }
 
@@ -310,11 +311,11 @@ module "hydra" {
   namespace   = kubernetes_namespace.hydra_namespace.metadata.0.name
 
   providers = {
-    helm       = "helm"
-    kubernetes = "kubernetes"
-    random     = "random"
-    template   = "template"
-    tls        = "tls"
+    helm       = helm
+    kubernetes = kubernetes
+    random     = random
+    template   = template
+    tls        = tls
   }
 }
 
@@ -334,10 +335,10 @@ module "rocket-chat" {
   smtp_password = var.athene2_php_smtp_password
 
   providers = {
-    google   = "google"
-    helm     = "helm"
-    random   = "random"
-    template = "template"
+    google   = google
+    helm     = helm
+    random   = random
+    template = template
   }
 }
 
