@@ -320,29 +320,29 @@ module "hydra" {
   }
 }
 
-module "rocket-chat" {
-  source = "github.com/serlo/infrastructure-modules-shared.git//rocket-chat?ref=86fa9688de6dbde14799c484ca5de655df51c12d"
-
-  host      = "community.${local.domain}"
-  namespace = kubernetes_namespace.community_namespace.metadata.0.name
-  image_tag = "2.2.1"
-
-  mongodump = {
-    image         = "eu.gcr.io/serlo-shared/mongodb-tools-base:1.0.1"
-    schedule      = "0 0 * * *"
-    bucket_prefix = local.project
-  }
-
-  smtp_password = var.athene2_php_smtp_password
-
-  providers = {
-    google     = google
-    helm       = helm
-    kubernetes = kubernetes
-    random     = random
-    template   = template
-  }
-}
+#module "rocket-chat" {
+#  source = "github.com/serlo/infrastructure-modules-shared.git//rocket-chat?ref=86fa9688de6dbde14799c484ca5de655df51c12d"
+#
+#  host      = "community.${local.domain}"
+#  namespace = kubernetes_namespace.community_namespace.metadata.0.name
+#  image_tag = "2.2.1"
+#
+#  mongodump = {
+#    image         = "eu.gcr.io/serlo-shared/mongodb-tools-base:1.0.1"
+#    schedule      = "0 0 * * *"
+#    bucket_prefix = local.project
+#  }
+#
+#  smtp_password = var.athene2_php_smtp_password
+#
+#  providers = {
+#    google     = google
+#    helm       = helm
+#    kubernetes = kubernetes
+#    random     = random
+#    template   = template
+#  }
+#}
 
 #####################################################################
 # ingress
