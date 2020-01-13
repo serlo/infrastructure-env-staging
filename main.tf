@@ -253,6 +253,7 @@ module "athene2_dbsetup" {
   # gcloud_service_account_name = module.gcloud_dbdump_reader.account_name
   gcloud_service_account_key  = ""
   gcloud_service_account_name = ""
+  dbsetup_image               = "eu.gcr.io/serlo-shared/athene2-dbsetup-cronjob:1.3.2"
 
   providers = {
     kubernetes = kubernetes
@@ -274,9 +275,9 @@ module "kpi" {
   kpi_database_password_default  = var.kpi_kpi_database_password_default
   kpi_database_password_readonly = var.kpi_kpi_database_password_readonly
 
-  grafana_image        = "eu.gcr.io/serlo-shared/kpi-grafana:1.0.1"
-  mysql_importer_image = "eu.gcr.io/serlo-shared/kpi-mysql-importer:1.2.1"
-  aggregator_image     = "eu.gcr.io/serlo-shared/kpi-aggregator:1.3.2"
+  grafana_image        = "eu.gcr.io/serlo-shared/kpi-grafana:1.2.0"
+  mysql_importer_image = "eu.gcr.io/serlo-shared/kpi-mysql-importer:1.3.3"
+  aggregator_image     = "eu.gcr.io/serlo-shared/kpi-aggregator:1.5.0"
 }
 
 module "ingress-nginx" {
