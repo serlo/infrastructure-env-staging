@@ -244,20 +244,25 @@ module "serlo_org" {
 }
 
 module "athene2_dbsetup" {
-  source                    = "github.com/serlo/infrastructure-modules-serlo.org.git//athene2_dbsetup?ref=972a0aab32801973cfc0f8d44f7676d16f7f9d08"
-  namespace                 = kubernetes_namespace.serlo_org_namespace.metadata.0.name
-  database_password_default = var.athene2_database_password_default
-  database_host             = module.gcloud_mysql.database_private_ip_address
-  # currently disable dbsetup via shared bucket in staging.
-  # gcloud_service_account_key  = module.gcloud_dbdump_reader.account_key
-  # gcloud_service_account_name = module.gcloud_dbdump_reader.account_name
-  gcloud_service_account_key  = ""
-  gcloud_service_account_name = ""
+  source                      = "github.com/serlo/infrastructure-modules-serlo.org.git//athene2_dbsetup?ref=fb43d20a82d2cf2345392a1f2de2020165098ffe"
+  namespace                   = kubernetes_namespace.serlo_org_namespace.metadata.0.name
+  database_password_default   = var.athene2_database_password_default
+  database_host               = module.gcloud_mysql.database_private_ip_address
+  gcloud_service_account_key  = module.gcloud_dbdump_reader.account_key
+  gcloud_service_account_name = module.gcloud_dbdump_reader.account_name
   dbsetup_image               = "eu.gcr.io/serlo-shared/athene2-dbsetup-cronjob:1.3.2"
 
   providers = {
-    kubernetes = kubernetes
     null       = null
+    kubernetes = kubernetes
+  }
+}
+
+module "gcloud_dbdump_reader" {
+  source = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_dbdump_reader?ref=193c415dc00b0a40e1790ad224864d3df6cfba3e"
+
+  providers = {
+    google = google
   }
 }
 
