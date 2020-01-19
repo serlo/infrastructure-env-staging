@@ -26,7 +26,7 @@ locals {
   athene2_php_definitions-file_path = "secrets/athene2/definitions.staging.php"
 
   athene2_database_instance_name = "${local.project}-mysql-2020-01-19-2"
-  kpi_database_instance_name     = "${local.project}-postgres-instance-10072019-2"
+  kpi_database_instance_name     = "${local.project}-postgres-2020-01-19"
 }
 
 #####################################################################
