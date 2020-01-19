@@ -25,7 +25,7 @@ locals {
 
   athene2_php_definitions-file_path = "secrets/athene2/definitions.staging.php"
 
-  athene2_database_instance_name = "${local.project}-mysql-instance-10072019-1"
+  athene2_database_instance_name = "${local.project}-mysql-2020-01-19-2"
   kpi_database_instance_name     = "${local.project}-postgres-instance-10072019-2"
 }
 
@@ -93,7 +93,7 @@ provider "tls" {
 # modules
 #####################################################################
 module "cluster" {
-  source   = "github.com/serlo/infrastructure-modules-gcloud.git//cluster?ref=a84a5c5cce63222211ee5697d564e3870946c030"
+  source   = "github.com/serlo/infrastructure-modules-gcloud.git//cluster?ref=11b4dd1acf0eaec6271c914092d35ac2ff817b61"
   name     = "${local.project}-cluster"
   location = "europe-west3-a"
   region   = local.region
@@ -113,14 +113,13 @@ module "cluster" {
 }
 
 module "gcloud_mysql" {
-  source                     = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_mysql?ref=a84a5c5cce63222211ee5697d564e3870946c030"
+  source                     = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_mysql?ref=11b4dd1acf0eaec6271c914092d35ac2ff817b61"
   database_instance_name     = local.athene2_database_instance_name
   database_connection_name   = "${local.project}:${local.region}:${local.athene2_database_instance_name}"
   database_region            = local.region
   database_name              = "serlo"
   database_tier              = "db-f1-micro"
   database_private_network   = module.cluster.network
-  private_ip_address_range   = module.cluster.reserved_peering_range.name
   database_password_default  = var.athene2_database_password_default
   database_password_readonly = var.athene2_database_password_readonly
 
@@ -131,13 +130,12 @@ module "gcloud_mysql" {
 }
 
 module "gcloud_postgres" {
-  source                   = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_postgres?ref=a84a5c5cce63222211ee5697d564e3870946c030"
+  source                   = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_postgres?ref=11b4dd1acf0eaec6271c914092d35ac2ff817b61"
   database_instance_name   = local.kpi_database_instance_name
   database_connection_name = "${local.project}:${local.region}:${local.kpi_database_instance_name}"
   database_region          = local.region
   database_names           = ["kpi", "hydra"]
   database_private_network = module.cluster.network
-  private_ip_address_range = module.cluster.reserved_peering_range.name
 
   database_password_postgres = var.kpi_kpi_database_password_postgres
   database_username_default  = module.kpi.kpi_database_username_default
@@ -261,7 +259,7 @@ module "athene2_dbsetup" {
 }
 
 module "gcloud_dbdump_reader" {
-  source = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_dbdump_reader?ref=a84a5c5cce63222211ee5697d564e3870946c030"
+  source = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_dbdump_reader?ref=11b4dd1acf0eaec6271c914092d35ac2ff817b61"
 
   providers = {
     google = google
