@@ -9,7 +9,7 @@ locals {
   service_account  = "terraform@serlo-staging.iam.gserviceaccount.com"
   region           = "europe-west3"
 
-  cluster_machine_type = "n1-standard-2"
+  cluster_machine_type = "n1-standard-1"
 
   serlo_org_image_tags = {
     server = {
