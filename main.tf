@@ -25,8 +25,8 @@ locals {
 
   athene2_php_definitions-file_path = "secrets/athene2/definitions.staging.php"
 
-  athene2_database_instance_name = "${local.project}-mysql-2020-01-19-2"
-  kpi_database_instance_name     = "${local.project}-postgres-2020-01-19"
+  athene2_database_instance_name = "${local.project}-mysql-2020-01-19-3"
+  kpi_database_instance_name     = "${local.project}-postgres-2020-01-19-3"
 }
 
 #####################################################################
@@ -93,7 +93,7 @@ provider "tls" {
 # modules
 #####################################################################
 module "cluster" {
-  source   = "github.com/serlo/infrastructure-modules-gcloud.git//cluster?ref=11b4dd1acf0eaec6271c914092d35ac2ff817b61"
+  source   = "github.com/serlo/infrastructure-modules-gcloud.git//cluster?ref=db007789fd2c69457034b29ab95f30ac5ffe2e7d"
   name     = "${local.project}-cluster"
   location = "europe-west3-a"
   region   = local.region
@@ -113,7 +113,7 @@ module "cluster" {
 }
 
 module "gcloud_mysql" {
-  source                     = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_mysql?ref=11b4dd1acf0eaec6271c914092d35ac2ff817b61"
+  source                     = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_mysql?ref=db007789fd2c69457034b29ab95f30ac5ffe2e7d"
   database_instance_name     = local.athene2_database_instance_name
   database_connection_name   = "${local.project}:${local.region}:${local.athene2_database_instance_name}"
   database_region            = local.region
@@ -130,7 +130,7 @@ module "gcloud_mysql" {
 }
 
 module "gcloud_postgres" {
-  source                   = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_postgres?ref=11b4dd1acf0eaec6271c914092d35ac2ff817b61"
+  source                   = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_postgres?ref=db007789fd2c69457034b29ab95f30ac5ffe2e7d"
   database_instance_name   = local.kpi_database_instance_name
   database_connection_name = "${local.project}:${local.region}:${local.kpi_database_instance_name}"
   database_region          = local.region
@@ -259,7 +259,7 @@ module "athene2_dbsetup" {
 }
 
 module "gcloud_dbdump_reader" {
-  source = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_dbdump_reader?ref=11b4dd1acf0eaec6271c914092d35ac2ff817b61"
+  source = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_dbdump_reader?ref=db007789fd2c69457034b29ab95f30ac5ffe2e7d"
 
   providers = {
     google = google
