@@ -93,7 +93,7 @@ provider "tls" {
 # modules
 #####################################################################
 module "cluster" {
-  source   = "github.com/serlo/infrastructure-modules-gcloud.git//cluster?ref=db007789fd2c69457034b29ab95f30ac5ffe2e7d"
+  source   = "github.com/serlo/infrastructure-modules-gcloud.git//cluster?ref=152c6cc9dc948fdd63232ff803d3c5e90c6f6a01"
   name     = "${local.project}-cluster"
   location = "europe-west3-a"
   region   = local.region
@@ -113,7 +113,7 @@ module "cluster" {
 }
 
 module "gcloud_mysql" {
-  source                     = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_mysql?ref=db007789fd2c69457034b29ab95f30ac5ffe2e7d"
+  source                     = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_mysql?ref=152c6cc9dc948fdd63232ff803d3c5e90c6f6a01"
   database_instance_name     = local.athene2_database_instance_name
   database_connection_name   = "${local.project}:${local.region}:${local.athene2_database_instance_name}"
   database_region            = local.region
@@ -130,7 +130,7 @@ module "gcloud_mysql" {
 }
 
 module "gcloud_postgres" {
-  source                   = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_postgres?ref=db007789fd2c69457034b29ab95f30ac5ffe2e7d"
+  source                   = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_postgres?ref=152c6cc9dc948fdd63232ff803d3c5e90c6f6a01"
   database_instance_name   = local.kpi_database_instance_name
   database_connection_name = "${local.project}:${local.region}:${local.kpi_database_instance_name}"
   database_region          = local.region
@@ -259,7 +259,7 @@ module "athene2_dbsetup" {
 }
 
 module "gcloud_dbdump_reader" {
-  source = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_dbdump_reader?ref=db007789fd2c69457034b29ab95f30ac5ffe2e7d"
+  source = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_dbdump_reader?ref=152c6cc9dc948fdd63232ff803d3c5e90c6f6a01"
 
   providers = {
     google = google
