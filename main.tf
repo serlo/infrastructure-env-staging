@@ -15,13 +15,13 @@ locals {
 
   serlo_org_image_tags = {
     server = {
-      httpd             = "6.0.0"
-      php               = "6.0.0"
+      httpd             = "7.0.0"
+      php               = "7.0.0"
       notifications_job = "2.0.1"
     }
-    editor_renderer        = "5.0.0"
+    editor_renderer        = "6.0.0"
     legacy_editor_renderer = "2.0.0"
-    frontend               = "3.0.0"
+    frontend               = "4.0.0"
   }
   varnish_image = "eu.gcr.io/serlo-shared/varnish:6.0"
 
@@ -77,7 +77,7 @@ module "gcloud_postgres" {
 }
 
 module "serlo_org" {
-  source = "github.com/serlo/infrastructure-modules-serlo.org.git//?ref=40f6359ed6f0667fe14a651f8e4ba45a0d4066ba"
+  source = "github.com/serlo/infrastructure-modules-serlo.org.git//?ref=c06694b40ac37bb2d5180dc7d05cd2cc521d4793"
 
   namespace         = kubernetes_namespace.serlo_org_namespace.metadata.0.name
   image_pull_policy = "IfNotPresent"
@@ -140,6 +140,7 @@ module "serlo_org" {
     hydra_admin_uri = module.hydra.admin_uri
     feature_flags   = "['client-frontend' => true, 'frontend-content' => true, 'frontend-diff' => true, 'frontend-editor' => true, 'frontend-legacy-content' => true, 'key-value-store' => true]"
     redis_hosts     = "['redis-master.redis']"
+    kafka_host      = ""
   }
 
   editor_renderer = {
