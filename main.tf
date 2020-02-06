@@ -215,7 +215,8 @@ module "cloudflare" {
 }
 
 module "hydra" {
-  source      = "github.com/serlo/infrastructure-modules-shared.git//hydra?ref=d3bffe9d351f6b466636bf2ac6bdb27c8730fd31"
+  source = "github.com/serlo/infrastructure-modules-shared.git//hydra?ref=f85d56e20608db92b30ec469b59b66876f08ce4a"
+
   dsn         = "postgres://${module.kpi.kpi_database_username_default}:${var.kpi_kpi_database_password_default}@${module.gcloud_postgres.database_private_ip_address}/hydra"
   url_login   = "https://de.${local.domain}/auth/hydra/login"
   url_consent = "https://de.${local.domain}/auth/hydra/consent"
@@ -224,7 +225,8 @@ module "hydra" {
 }
 
 module "redis" {
-  source    = "github.com/serlo/infrastructure-modules-shared.git//redis?ref=d3bffe9d351f6b466636bf2ac6bdb27c8730fd31"
+  source = "github.com/serlo/infrastructure-modules-shared.git//redis?ref=f85d56e20608db92b30ec469b59b66876f08ce4a"
+
   namespace = kubernetes_namespace.redis_namespace.metadata.0.name
   image_tag = "5.0.7-debian-9-r12"
 }
