@@ -15,7 +15,7 @@ locals {
 }
 
 module "serlo_org" {
-  source = "github.com/serlo/infrastructure-modules-serlo.org.git//?ref=e1f7e2942ab2bc4a8307f0e67985f4bed0692162"
+  source = "github.com/serlo/infrastructure-modules-serlo.org.git//?ref=b3a6527c66778ed6fe4e2051280d4fd4797afd5d"
 
   namespace         = kubernetes_namespace.serlo_org_namespace.metadata.0.name
   image_pull_policy = "IfNotPresent"
