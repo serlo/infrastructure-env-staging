@@ -69,7 +69,7 @@ module "athene2_dbsetup" {
   database_host               = module.gcloud_mysql.database_private_ip_address
   gcloud_service_account_key  = module.gcloud_dbdump_reader.account_key
   gcloud_service_account_name = module.gcloud_dbdump_reader.account_name
-  dbsetup_image               = "eu.gcr.io/serlo-shared/athene2-dbsetup-cronjob:2.0.0"
+  dbsetup_image               = "eu.gcr.io/serlo-shared/athene2-dbsetup-cronjob:2.0.1"
 }
 
 module "gcloud_dbdump_reader" {
