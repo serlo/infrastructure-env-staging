@@ -83,10 +83,11 @@ resource "kubernetes_ingress" "athene2_ingress" {
     namespace = kubernetes_namespace.serlo_org_namespace.metadata.0.name
 
     annotations = {
-      "kubernetes.io/ingress.class"             = "nginx",
-      "nginx.ingress.kubernetes.io/auth-type"   = "basic",
-      "nginx.ingress.kubernetes.io/auth-secret" = "basic-auth-ingress-secret",
-      "nginx.ingress.kubernetes.io/auth-realm"  = "Authentication Required"
+      "kubernetes.io/ingress.class"                 = "nginx",
+      "nginx.ingress.kubernetes.io/auth-type"       = "basic",
+      "nginx.ingress.kubernetes.io/auth-secret"     = "basic-auth-ingress-secret",
+      "nginx.ingress.kubernetes.io/auth-realm"      = "Authentication Required"
+      "nginx.ingress.kubernetes.io/proxy-body-size" = "2M"
     }
   }
 
