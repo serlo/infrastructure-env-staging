@@ -77,7 +77,7 @@ module "gcloud_dbdump_reader" {
 }
 
 module "ingress-nginx" {
-  source = "github.com/serlo/infrastructure-modules-shared.git//ingress-nginx?ref=d3bffe9d351f6b466636bf2ac6bdb27c8730fd31"
+  source = "github.com/serlo/infrastructure-modules-shared.git//ingress-nginx?ref=3fa3f9f248016a1f455cea4413d72042e05543ec"
 
   namespace   = kubernetes_namespace.ingress_nginx_namespace.metadata.0.name
   ip          = module.cluster.address
