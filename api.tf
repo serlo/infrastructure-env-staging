@@ -13,11 +13,11 @@ module "api_redis" {
 }
 
 module "api_secrets" {
-  source = "github.com/serlo/infrastructure-modules-api.git//secrets?ref=2e31ea94804f26b6494471174b0ff986fe54e606"
+  source = "github.com/serlo/infrastructure-modules-api.git//secrets?ref=0f600569b714e983fdd03709b9899167e9887eb4"
 }
 
 module "api_server" {
-  source = "github.com/serlo/infrastructure-modules-api.git//server?ref=2e31ea94804f26b6494471174b0ff986fe54e606"
+  source = "github.com/serlo/infrastructure-modules-api.git//server?ref=0f600569b714e983fdd03709b9899167e9887eb4"
 
   namespace         = kubernetes_namespace.api_namespace.metadata.0.name
   image_tag         = local.api.image_tag
@@ -32,6 +32,8 @@ module "api_server" {
     google_api_key        = var.api_active_donors_google_api_key
     google_spreadsheet_id = var.api_active_donors_google_spreadsheet_id
   }
+
+  sentry_dsn = "https://dd6355782e894e048723194b237baa39@o115070.ingest.sentry.io/5385534"
 }
 
 module "api_server_ingress" {
