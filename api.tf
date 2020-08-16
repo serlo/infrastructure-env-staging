@@ -1,6 +1,6 @@
 locals {
   api = {
-    image_tag = "0.8.1"
+    image_tag = "0.9.0"
   }
 }
 
@@ -13,11 +13,11 @@ module "api_redis" {
 }
 
 module "api_secrets" {
-  source = "github.com/serlo/infrastructure-modules-api.git//secrets?ref=0f600569b714e983fdd03709b9899167e9887eb4"
+  source = "github.com/serlo/infrastructure-modules-api.git//secrets?ref=00016ad7825233ea3a5f1c05de7f596a654c894a"
 }
 
 module "api_server" {
-  source = "github.com/serlo/infrastructure-modules-api.git//server?ref=0f600569b714e983fdd03709b9899167e9887eb4"
+  source = "github.com/serlo/infrastructure-modules-api.git//server?ref=00016ad7825233ea3a5f1c05de7f596a654c894a"
 
   namespace         = kubernetes_namespace.api_namespace.metadata.0.name
   image_tag         = local.api.image_tag
@@ -33,7 +33,8 @@ module "api_server" {
     google_spreadsheet_id = var.api_active_donors_google_spreadsheet_id
   }
 
-  sentry_dsn = "https://dd6355782e894e048723194b237baa39@o115070.ingest.sentry.io/5385534"
+  sentry_dsn         = "https://dd6355782e894e048723194b237baa39@o115070.ingest.sentry.io/5385534"
+  sentry_environment = "staging"
 }
 
 module "api_server_ingress" {
