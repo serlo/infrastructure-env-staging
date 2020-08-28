@@ -1,8 +1,9 @@
 locals {
   kpi = {
-    grafana_image_tag        = "1.5.0"
+    grafana_image_tag        = "1.6.2"
     mysql_importer_image_tag = "1.4.1"
-    aggregator_image_tag     = "1.6.4"
+    aggregator_image_tag     = "1.7.1"
+    mfnf_importer_image_tag  = "1.0.1"
   }
 }
 
