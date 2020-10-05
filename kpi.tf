@@ -25,6 +25,7 @@ module "kpi" {
   grafana_image        = "eu.gcr.io/serlo-shared/kpi-grafana:${local.kpi.grafana_image_tag}"
   mysql_importer_image = "eu.gcr.io/serlo-shared/kpi-mysql-importer:${local.kpi.mysql_importer_image_tag}"
   aggregator_image     = "eu.gcr.io/serlo-shared/kpi-aggregator:${local.kpi.aggregator_image_tag}"
+  mfnf_importer_image  = "eu.gcr.io/serlo-shared/kpi-mfnf-importer:${local.kpi.mfnf_importer_image_tag}"
 }
 
 module "kpi_ingress" {
