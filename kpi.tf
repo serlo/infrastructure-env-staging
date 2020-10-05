@@ -8,7 +8,7 @@ locals {
 }
 
 module "kpi" {
-  source = "github.com/serlo/infrastructure-modules-kpi.git//kpi?ref=v1.3.1"
+  source = "github.com/serlo/infrastructure-modules-kpi.git//kpi?ref=v1.4.0"
 
   domain = local.domain
 
