@@ -15,7 +15,7 @@ locals {
 }
 
 module "serlo_org" {
-  source = "github.com/serlo/infrastructure-modules-serlo.org.git//?ref=2841cc287008ac47c4964ecfc39a474975bf77dc"
+  source = "github.com/serlo/infrastructure-modules-serlo.org.git//?ref=777314d6f13f4877b056421c71069838bafff679"
 
   namespace         = kubernetes_namespace.serlo_org_namespace.metadata.0.name
   image_pull_policy = "IfNotPresent"
@@ -61,6 +61,7 @@ module "serlo_org" {
 
     enable_tracking_hotjar           = false
     enable_tracking_google_analytics = false
+    enable_tracking_simple_analytics = false
     enable_tracking_matomo           = false
     matomo_tracking_domain           = "analytics.${local.domain}"
   }
