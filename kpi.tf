@@ -8,7 +8,7 @@ locals {
 }
 
 module "kpi" {
-  source = "github.com/serlo/infrastructure-modules-kpi.git//kpi?ref=v1.4.0"
+  source = "github.com/serlo/infrastructure-modules-kpi.git//kpi?ref=v1.4.1"
 
   domain = local.domain
 
@@ -29,7 +29,7 @@ module "kpi" {
 }
 
 module "kpi_ingress" {
-  source = "github.com/serlo/infrastructure-modules-shared.git//ingress?ref=9b7a486cf487a79069e4a0c7806de0666f78a0c4"
+  source = "github.com/serlo/infrastructure-modules-shared.git//ingress?ref=34a6da8a720f4b8b3a381d57551f4c6bf6de1249"
 
   name      = "kpi"
   namespace = kubernetes_namespace.kpi_namespace.metadata.0.name
