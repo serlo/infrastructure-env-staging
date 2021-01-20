@@ -35,7 +35,7 @@ module "api" {
     image_tag = local.api.image_tags.database_layer
 
     database_url             = "mysql://serlo_readonly:${var.athene2_database_password_readonly}@${module.gcloud_mysql.database_private_ip_address}:3306/serlo"
-    database_max_connections = 10
+    database_max_connections = 25
   }
 
   server = {
