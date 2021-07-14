@@ -17,7 +17,7 @@ module "api_redis" {
 }
 
 module "api" {
-  source = "github.com/serlo/infrastructure-modules-api.git//?ref=39266bfeb5d985c85041d0a7117dc759768555d6"
+  source = "github.com/serlo/infrastructure-modules-api.git//?ref=v5.1.0"
 
   namespace         = kubernetes_namespace.api_namespace.metadata.0.name
   image_tag         = local.api.image_tags.server
