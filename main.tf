@@ -13,7 +13,7 @@ locals {
 
   cluster_machine_type = "n1-highcpu-2"
 
-  mysql_database_instance_name = "${local.project}-mysql-2020-01-19"
+  mysql_database_instance_name = "${local.project}-mysql-2021-07-15"
   kpi_database_instance_name   = "${local.project}-postgres-2020-01-19-3"
 }
 
@@ -36,8 +36,9 @@ module "cluster" {
 }
 
 module "mysql" {
-  source                     = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_mysql?ref=v1.0.2"
+  source                     = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_mysql?ref=v1.1.0"
   database_instance_name     = local.mysql_database_instance_name
+  database_version           = "MYSQL_5_7"
   database_connection_name   = "${local.project}:${local.region}:${local.mysql_database_instance_name}"
   database_region            = local.region
   database_name              = "serlo"
