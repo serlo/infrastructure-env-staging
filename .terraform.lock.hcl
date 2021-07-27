@@ -23,42 +23,40 @@ provider "registry.terraform.io/cloudflare/cloudflare" {
 }
 
 provider "registry.terraform.io/hashicorp/google" {
-  version     = "3.75.0"
+  version     = "3.77.0"
   constraints = "~> 3.0"
   hashes = [
-    "h1:I4tkR3ZlYWhyAerN3i2kYjs+0d6WDHrfGs2aUAWL+DQ=",
-    "h1:Kpwwa4CNxBdBgOD+O+EQYxpB6OfPFwmCqwddwtHkEzg=",
-    "zh:26be4916941d6c06cd64e3ea9b9449dc2c53520812b30fab90c5a6ba37167f1a",
-    "zh:273a4a7061b1b262a839fde6537b59a0c48e09af43ac66b44b3f01004a3b96a2",
-    "zh:2a8bb612eb016a9882dda952a9ffed4b63d234ebe81ada294c360ee01bf0fb27",
-    "zh:68a56e2ebf36c65ee402149d400887c7e820bfa7c581f13e43ddb5ba746f5e5c",
-    "zh:7831999f8f639c21df6101dae571618c9557006ecb225d1aaf0c069985711018",
-    "zh:95c2433c750ecdf43d485f962cff9eab46eb5259fc6c36c49841c752a33d1584",
-    "zh:9a41539b94b3831c1d399bc15eb8421be2963575d0e2eb99b921c3465b85d657",
-    "zh:a3bea141a1041c6e282d8a3cbd4bdd77223fff5100aed611c3d6a3be88119438",
-    "zh:c8c77814576b2f4ec4a0686e65c460924cf9e3e05554975986a2eb71aa668ab2",
-    "zh:d837dcac41e6204a58ff527d5cbeecac7623864ba4877702a9c942a5f376c096",
-    "zh:f37668429b8adfac4abb25c51051e006ba74c68f5da4f545019fc6e6ad56879a",
+    "h1:4hiayrO14LjGUzCEOHLRP/+Znuq+/mFsNaOPIvm+nnU=",
+    "zh:0dfa53acdc6cd81973424e5b4497e37c4538db1e6ed5818ed0e96f837a31b286",
+    "zh:1e54cffecddf069d682f7f45d99c18a49d86afd590af6be02d50397b04e468ec",
+    "zh:21be65dd260ebf5f4130e4b9a719e3b260fc6f2e80c16a50f73a47fdbfe69c97",
+    "zh:2955f3af0db620eb63f8c631448d2fd4566c4a270e655ce7e6bf8fa13806d7c6",
+    "zh:2d3e9b876557c7d2406a438114b2ddf24a805418c3601ef7c550980508965650",
+    "zh:2f6cf592606e7a198fa275e93ce39dbf8a76f916f4a0842543f45ebd5a3d281c",
+    "zh:59a7d05f3309078735b82640582dd4683605c7c10eaa41136c348bfa2d1e54a6",
+    "zh:6fc3d947db6bbd222bbfc658bf7a27ac9f144570bebe0ce41ce6df95bee63635",
+    "zh:83b1eca52c25971d2fd2ad0a733156236383680832ef54d3c59d3f385a05f510",
+    "zh:86e4c542c4ddebca82668dd8bfe3f86808b60bbd9c4edf0c08d37c758f6d57d3",
+    "zh:8bd36a0df91862c003ca6a204ad5715a36d72b9a26a63e1378c18139f34b39c1",
   ]
 }
 
 provider "registry.terraform.io/hashicorp/google-beta" {
-  version     = "3.75.0"
+  version     = "3.77.0"
   constraints = "~> 3.0"
   hashes = [
-    "h1:axPDONSresEYIc5UD1BaO3AdORqav2Da3HgqD4whRWY=",
-    "h1:iTp1Iqj/afacLTInWbF9bSKoF//xXi+H2SpXEhx+vFM=",
-    "zh:077adc06342d6d8c9551705214659e7d0568003ca2a19c3d9d16b8658a247dce",
-    "zh:284563170b938c2442b27d6d625caadc97ed9bfb0defde60a889e97efa722918",
-    "zh:5a74e8e80926739a52bcd2c977a482e5410c213e9bd9cc14dc665efb6f9a3813",
-    "zh:669e8c891692c83e33ebe07bbef261fd1e4ed76be68ee37b7d7fac60640d1326",
-    "zh:6aeb3bbe44f2955b80b7b1a6d541b881f9db01ceb990d02a2f7f1ecfb0bcb88e",
-    "zh:6c21bac21d233804f3eb19dbb7b257083af0c15f2cd162f920f326cd87a4a6f4",
-    "zh:82be94b8183dbc71046c7c1cc60a6a474ad808a7e213f05a82efb3fc9e77b62d",
-    "zh:b79eb07984176f4549b42506ce91bb134f7ae7cec5e4dcfc49ea744ad617addc",
-    "zh:d6b2d20260bd0e6e41e41c6010bca56888ca4109128c535f1946dfd7293c2a94",
-    "zh:dccee01f716f95133f2934b07d217d3175402ae18dd0d72cd1c793af4fc436f2",
-    "zh:fbcd9342445eb2493a1115d282f403640e468aa914986e0adf4e68ec100e83ed",
+    "h1:aA3douL245Q9HoiQO4NjbyBFcOi4vrmUGKFuyLQYQlc=",
+    "zh:2405571839d5b2cd5e00993a14778d11652beb44d4c3e38d8f857efc293e85dc",
+    "zh:35d6c6ab6e01a25a98242b6eaa4781ffc12119623d02a4b3f9a4001bf35291b2",
+    "zh:6cf0cac4f0ef4e2159dfc7aceb70ea0cc215f2d37ffb91f1e52ed89a0444f073",
+    "zh:8a88f48b302a5d8bb8db6f0d18cab33c327b6e3da85aca12974886e83f297a16",
+    "zh:97728db63cfce4e4414c3ea58c6a25c13da7540fe416414f626395f3b3908042",
+    "zh:ab7bddda5535e04c4c0116e1716f381a6c71c2cb3966bef07198965b726f2c2e",
+    "zh:ce4e69c15ffc7f6ae8dcc4adf94230a4685bbdea9c27781d109fa41c9ff0e55f",
+    "zh:e110e367bbf59a830015bfb9d9a7545126637c8a5965d3142e2224383131ca38",
+    "zh:e2308abda1fd4ee405fb760344e4905507c605275a85d60e182867d50cb08c33",
+    "zh:e769557f2acdd2794dd1855d2f0ba4292314d04671fef7ea9f8fc56b169decf9",
+    "zh:e9fe10d1ca04d5ae59b142ecd054808e300887b5ae6a4dce5ee6606a542f4ced",
   ]
 }
 
