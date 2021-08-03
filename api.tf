@@ -2,7 +2,7 @@ locals {
   api = {
     image_tags = {
       database_layer = "0.3.21"
-      server         = "0.26.17"
+      server         = "0.26.18"
       cache_worker   = "0.4.2"
     }
   }
