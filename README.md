@@ -13,6 +13,6 @@ To get access to our dev/staging environments please contact us.
 
 ## Deployment process for staging
 
-The deployment of infrastructure code or new app versions into staging has to be reviewed by the infrastructure unit. 
+The deployment of infrastructure code or new app versions into staging has to be reviewed by the infrastructure unit.
 
-Therefore please open a new **pull request** into master.
+Therefore please open a new **pull request** into main.
