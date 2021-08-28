@@ -61,22 +61,21 @@ provider "registry.terraform.io/hashicorp/google-beta" {
 }
 
 provider "registry.terraform.io/hashicorp/helm" {
-  version     = "2.2.0"
+  version     = "2.3.0"
   constraints = "~> 2.0"
   hashes = [
-    "h1:liBgOoOXhA2A1DbL0oaifyNnoGOyHxMG4+xD1Kl58XA=",
-    "h1:rxDS2QQuG/M9aRSKlvW2oHsp5eGAoB1J9KZthCOVbeQ=",
-    "zh:01341dd1e9cc7e7f6999e11e7473bcdca2dd72dd27f91beed1f4fb599a15dfba",
-    "zh:20e86c9eccd3a81ef5ac243af31b61fc4d2d679437384bd0870e92fa1b3ed6c9",
-    "zh:22a71127c5dbea4f62edb5bcf00b5c163de04aa19d45a7a1f621f973ffd09d20",
-    "zh:28ab7c84a5f8ed82fc520668db93d650571ddf59d98845cb18a1fa1a7888efc0",
-    "zh:3985a30929ad8fdc6b94f0e1cbd62a63db75ee961b8ba7db1cf4bfd29e8009ff",
-    "zh:477d92e26ba0c906087a5dd827ac3917dad7d5af770ee0ab4b08d0f273150586",
-    "zh:750928ec5ef54b2090bd6a6d8a19630a8712bbbccc0429251e88ccd361c1d3c0",
-    "zh:a615841fd90094bddc1269127e501fa60453c441b9548ff73752fe14efc38ed0",
-    "zh:e762aca7883374fa255efba50f5bdf791fece7d61e3920e593fb1a2cbb598981",
-    "zh:f76f372ead52948ca53610b371cb80c80ebcf058ef0a5c0ce9f0ce38dcc9a8eb",
-    "zh:fa36fe93ed977f4478cc6547ec3c45c28e56f10632e85446b0c3d71449f8c4bb",
+    "h1:qo08yDJAnkE8H2CNuI2fVP2W+J3bOCrXWRvAerQpgc8=",
+    "zh:0c63c0aa9f13ec057971c9ddd0965e062b064c0b2ce9a3d13df41239b8f5af89",
+    "zh:14b4146e56b1c1e5492ce597d03fb993a71039dd701e3886667f7ad3d60afd34",
+    "zh:3882a3a091aeac1d42a01c7654c727a46870185d363454579e707c672a42f430",
+    "zh:3ccb84b23348e2b64ffe273170f686e6927e974060e37b52459ab2395bd59523",
+    "zh:4fb709aeb63dd6dee1e851459ac87c399ddb831ebfe9e28e4c9827c65bb55b67",
+    "zh:6739a4da9510f552b93fa77859f04c20af3a7a40a7f0b0073eb723af36b8156b",
+    "zh:7432b070124a161fe6a32dc6b76fd45100d079fdee917318460a82b80cda5518",
+    "zh:9aa51dc2a649fcaac133dad5c1e148c2e0f675fdf18b1d3b1da53549d8fa3b36",
+    "zh:a9a2abf1fbec56019473c8696d285703218ea0e8f2dc01879e7a391ea8785d57",
+    "zh:b3c25b085b7a7fbc05000303d82c54531987525575ff337e4be6fc152f4200d4",
+    "zh:fa8cb34df7786bbeffcee664eab72aeb15c4f8fba2d9c0b05faca6b3e819cf33",
   ]
 }
 
