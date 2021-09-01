@@ -7,7 +7,7 @@ locals {
         migrate           = "19.0.0-equations.3"
         notifications_job = "3.0.5"
       }
-      editor_renderer        = "13.2.0-equations.2"
+      editor_renderer        = "13.3.0-equations.0"
       legacy_editor_renderer = "3.0.4"
       varnish                = "6.0.2"
     }
