@@ -7,7 +7,7 @@ locals {
         migrate           = "19.0.5"
         notifications_job = "3.0.5"
       }
-      editor_renderer        = "13.4.2"
+      editor_renderer        = "13.4.3"
       legacy_editor_renderer = "3.0.4"
       varnish                = "6.0.2"
     }
