@@ -11,7 +11,7 @@ locals {
 }
 
 module "hydra" {
-  source = "github.com/serlo/infrastructure-modules-shared.git//hydra?ref=v5.2.0"
+  source = "github.com/serlo/infrastructure-modules-shared.git//hydra?ref=v6.0.0"
 
   namespace = kubernetes_namespace.hydra_namespace.metadata.0.name
   # TODO: add extra user for hydra
@@ -25,7 +25,7 @@ module "hydra" {
 }
 
 module "kratos" {
-  source = "github.com/serlo/infrastructure-modules-shared.git//kratos?ref=v5.2.0"
+  source = "github.com/serlo/infrastructure-modules-shared.git//kratos?ref=v6.0.0"
 
   namespace = kubernetes_namespace.kratos_namespace.metadata.0.name
   # TODO: add extra user for kratos
