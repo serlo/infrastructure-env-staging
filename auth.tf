@@ -1,8 +1,8 @@
 locals {
-  chart_version = "0.20.0"
+  chart_version = "0.20.2"
 
   hydra = {
-    image_tag = "v1.10.6"
+    image_tag = "v1.10.7"
   }
 
   kratos = {
