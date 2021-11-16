@@ -25,7 +25,7 @@ module "hydra" {
 }
 
 module "kratos" {
-  source = "github.com/serlo/infrastructure-modules-shared.git//kratos?ref=v6.0.0"
+  source = "github.com/serlo/infrastructure-modules-shared.git//kratos?ref=v7.0.0"
 
   namespace = kubernetes_namespace.kratos_namespace.metadata.0.name
   # TODO: add extra user for kratos
@@ -35,6 +35,8 @@ module "kratos" {
   smtp_password = var.athene2_php_smtp_password
   chart_version = local.chart_version
   image_tag     = local.kratos.image_tag
+
+  github = var.github
 }
 
 resource "kubernetes_namespace" "hydra_namespace" {
