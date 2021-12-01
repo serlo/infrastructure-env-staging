@@ -1,5 +1,5 @@
 locals {
-  chart_version = "0.20.2"
+  chart_version = "0.21.1"
 
   hydra = {
     image_tag = "v1.10.7"
@@ -22,21 +22,6 @@ module "hydra" {
   host          = "hydra.${local.domain}"
   chart_version = local.chart_version
   image_tag     = local.hydra.image_tag
-}
-
-module "kratos" {
-  source = "github.com/serlo/infrastructure-modules-shared.git//kratos?ref=v7.0.0"
-
-  namespace = kubernetes_namespace.kratos_namespace.metadata.0.name
-  # TODO: add extra user for kratos
-  dsn  = "postgres://${module.kpi.kpi_database_username_default}:${var.kpi_kpi_database_password_default}@${module.gcloud_postgres.database_private_ip_address}/kratos"
-  host = "kratos.${local.domain}"
-  # TODO: rename
-  smtp_password = var.athene2_php_smtp_password
-  chart_version = local.chart_version
-  image_tag     = local.kratos.image_tag
-
-  github = var.github
 }
 
 resource "kubernetes_namespace" "hydra_namespace" {
