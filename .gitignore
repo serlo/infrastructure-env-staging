@@ -13,3 +13,6 @@ secrets/
 
 #ignore tmp folder
 **/tmp
+
+#ides
+.idea/
