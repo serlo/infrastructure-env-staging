@@ -4,10 +4,6 @@ locals {
   hydra = {
     image_tag = "v1.10.7"
   }
-
-  kratos = {
-    image_tag = "v0.8.0-alpha.1.pre.3"
-  }
 }
 
 module "hydra" {
@@ -27,11 +23,5 @@ module "hydra" {
 resource "kubernetes_namespace" "hydra_namespace" {
   metadata {
     name = "hydra"
-  }
-}
-
-resource "kubernetes_namespace" "kratos_namespace" {
-  metadata {
-    name = "kratos"
   }
 }
