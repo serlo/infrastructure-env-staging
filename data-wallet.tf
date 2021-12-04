@@ -1,5 +1,9 @@
 locals {
   data_wallet = {
+    chart_versions = {
+      mongodb = "10.23.13"
+    }
+
     image_tags = {
       enmeshed = "2.1.1"
       mongodb  = "4.4.8"
@@ -10,17 +14,14 @@ locals {
 module "data_wallet" {
   source = "../infrastructure-modules-shared/enmeshed" # TODO
 
-  namespace  = kubernetes_namespace.enmeshed_namespace.metadata.0.name
-  image_tags = local.data_wallet.image_tags
-  host       = "enmeshed.${local.domain}"
-
-
+  namespace      = kubernetes_namespace.data_wallet_namespace.metadata.0.name
+  chart_versions = local.data_wallet.chart_versions
+  image_tags     = local.data_wallet.image_tags
+  host           = "enmeshed.${local.domain}"
 }
-# TODO: maybe change it to data_wallet_namespace
-resource "kubernetes_namespace" "enmeshed_namespace" {
+resource "kubernetes_namespace" "data_wallet_namespace" {
   metadata {
-    # TODO: maybe change it to data-wallet
-    name = "enmeshed"
+    name = "data-wallet"
   }
 }
 
@@ -28,7 +29,7 @@ module "enmeshed_ingress" {
   source = "github.com/serlo/infrastructure-modules-shared.git//ingress?ref=v6.0.0"
 
   name      = "enmeshed"
-  namespace = kubernetes_namespace.enmeshed_namespace.metadata.0.name
+  namespace = kubernetes_namespace.data_wallet_namespace.metadata.0.name
   host      = "enmeshed.${local.domain}"
   backend = {
     service_name = module.data_wallet.enmeshed_connector_service_name
