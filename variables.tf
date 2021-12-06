@@ -98,7 +98,7 @@ variable "enmeshed_platform_client_secret" {
   type = string
 }
 
-variable "api_key_for_enmeshed_connector" {
+variable "enmeshed_api_key" {
   description = "API key the Enmeshed Connector uses to authenticate requests."
   type        = string
 }

@@ -18,10 +18,10 @@ module "data_wallet" {
   chart_versions         = local.data_wallet.chart_versions
   image_tags             = local.data_wallet.image_tags
   host                   = "enmeshed.${local.domain}"
-  platform_client_id     = var.enmeshed_platform_client_id     // TODO: update source
-  platform_client_secret = var.enmeshed_platform_client_secret // TODO: update source
+  platform_client_id     = var.enmeshed_platform_client_id
+  platform_client_secret = var.enmeshed_platform_client_secret
   api_url                = "api.${local.domain}"
-  api_key                = var.api_key_for_enmeshed_connector // TODO: update source and chose a real key
+  api_key                = var.enmeshed_api_key // TODO: chose a real key
 }
 
 resource "kubernetes_namespace" "data_wallet_namespace" {
