@@ -21,7 +21,7 @@ module "data_wallet" {
   platform_client_id     = var.enmeshed_platform_client_id
   platform_client_secret = var.enmeshed_platform_client_secret
   api_url                = "api.${local.domain}"
-  api_key                = var.enmeshed_api_key // TODO: chose a real key
+  api_key                = var.enmeshed_api_key
 }
 
 resource "kubernetes_namespace" "data_wallet_namespace" {

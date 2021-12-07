@@ -62,8 +62,8 @@ module "api" {
 
     enmeshed = {
       host           = "https://enmeshed.serlo-staging.dev"
-      server_secret  = "apiKey"
-      webhook_secret = "apiKey"
+      server_secret  = var.enmeshed_api_key
+      webhook_secret = var.enmeshed_api_key
     }
   }
 
