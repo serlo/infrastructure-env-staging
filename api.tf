@@ -2,7 +2,7 @@ locals {
   api = {
     image_tags = {
       database_layer = "0.3.28-staging.1"
-      server         = "0.26.30-staging.0"
+      server         = "0.26.30-staging.1"
       cache_worker   = "0.4.2"
     }
   }
@@ -17,7 +17,7 @@ module "api_redis" {
 }
 
 module "api" {
-  source = "github.com/serlo/infrastructure-modules-api.git//?ref=v6.0.2"
+  source = "github.com/serlo/infrastructure-modules-api.git//?ref=v7.0.1"
 
   namespace         = kubernetes_namespace.api_namespace.metadata.0.name
   image_tag         = local.api.image_tags.server
@@ -59,6 +59,12 @@ module "api" {
       password = var.api_swr_queue_dashboard_password
     }
     sentry_dsn = "https://dd6355782e894e048723194b237baa39@o115070.ingest.sentry.io/5385534"
+
+    enmeshed = {
+      host           = "https://enmeshed.serlo-staging.dev"
+      server_secret  = var.enmeshed_api_key
+      webhook_secret = var.enmeshed_api_key
+    }
   }
 
   swr_queue_worker = {
@@ -67,7 +73,7 @@ module "api" {
 }
 
 module "api_server_ingress" {
-  source = "github.com/serlo/infrastructure-modules-shared.git//ingress?ref=v6.0.0"
+  source = "github.com/serlo/infrastructure-modules-shared.git//ingress?ref=v9.0.0"
 
   name      = "api"
   namespace = kubernetes_namespace.api_namespace.metadata.0.name
@@ -76,7 +82,8 @@ module "api_server_ingress" {
     service_name = module.api.server_service_name
     service_port = module.api.server_service_port
   }
-  enable_tls = true
+  enable_tls  = true
+  enable_cors = true
 }
 
 resource "kubernetes_namespace" "api_namespace" {
