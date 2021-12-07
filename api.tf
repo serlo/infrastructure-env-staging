@@ -73,7 +73,7 @@ module "api" {
 }
 
 module "api_server_ingress" {
-  source = "../infrastructure-modules-shared/ingress" # TODO
+  source = "github.com/serlo/infrastructure-modules-shared.git//ingress?ref=v9.0.0"
 
   name      = "api"
   namespace = kubernetes_namespace.api_namespace.metadata.0.name
