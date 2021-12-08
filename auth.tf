@@ -27,12 +27,13 @@ module "hydra" {
 }
 
 module "keycloak" {
-  source = "github.com/serlo/infrastructure-modules-shared.git//keycloak?ref=v9.1.1"
+  source = "github.com/serlo/infrastructure-modules-shared.git//keycloak?ref=v10.0.0"
 
   namespace     = kubernetes_namespace.keycloak_namespace.metadata.0.name
   chart_version = local.keycloak.chart_version
   image_tag     = local.keycloak.image_tag
 
+  host = "keycloak.${local.domain}"
   # TODO: add extra user for keycloak
   database = {
     host     = module.gcloud_postgres.database_private_ip_address

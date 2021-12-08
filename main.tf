@@ -88,7 +88,7 @@ module "ingress-nginx" {
 }
 
 module "cloudflare" {
-  source  = "github.com/serlo/infrastructure-modules-env-shared.git//cloudflare?ref=v4.0.0"
+  source  = "github.com/serlo/infrastructure-modules-env-shared.git//cloudflare?ref=v4.1.0"
   domain  = local.domain
   ip      = module.cluster.address
   zone_id = "0067b08b108fbcf88ddaeaae4ac3d6ac"
