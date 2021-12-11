@@ -7,7 +7,7 @@ locals {
 
   keycloak = {
     chart_version = "5.2.0"
-    image_tag     = "15.0.2"
+    image_tag     = "14.0.0"
   }
 }
 
