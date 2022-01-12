@@ -21,23 +21,32 @@ locals {
 # modules
 #####################################################################
 module "cluster" {
-  source   = "github.com/serlo/infrastructure-modules-gcloud.git//cluster?ref=v3.0.0"
+  source   = "github.com/serlo/infrastructure-modules-gcloud.git//cluster?ref=v4.0.0"
   name     = "${local.project}-cluster"
   project  = local.project
   location = local.zone
   region   = local.region
 
-  node_pool = {
-    machine_type       = local.cluster_machine_type
-    preemptible        = true
-    initial_node_count = 2
-    min_node_count     = 2
-    max_node_count     = 10
+  node_pools = {
+    preemptible = {
+      machine_type       = local.cluster_machine_type
+      preemptible        = true
+      initial_node_count = 2
+      min_node_count     = 2
+      max_node_count     = 10
+    }
+    non-preemptible = {
+      machine_type       = local.cluster_machine_type
+      preemptible        = false
+      initial_node_count = 0
+      min_node_count     = 0
+      max_node_count     = 10
+    }
   }
 }
 
 module "mysql" {
-  source                     = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_mysql?ref=v3.0.0"
+  source                     = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_mysql?ref=v4.0.0"
   database_instance_name     = local.mysql_database_instance_name
   database_version           = "MYSQL_5_7"
   database_connection_name   = "${local.project}:${local.region}:${local.mysql_database_instance_name}"
@@ -50,7 +59,7 @@ module "mysql" {
 }
 
 module "gcloud_postgres" {
-  source                   = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_postgres?ref=v3.0.0"
+  source                   = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_postgres?ref=v4.0.0"
   database_instance_name   = local.kpi_database_instance_name
   database_connection_name = "${local.project}:${local.region}:${local.kpi_database_instance_name}"
   database_region          = local.region
@@ -65,8 +74,9 @@ module "gcloud_postgres" {
 }
 
 module "athene2_dbsetup" {
-  source                      = "github.com/serlo/infrastructure-modules-serlo.org.git//athene2_dbsetup?ref=v3.0.0"
+  source                      = "github.com/serlo/infrastructure-modules-serlo.org.git//athene2_dbsetup?ref=v4.0.0"
   namespace                   = kubernetes_namespace.serlo_org_namespace.metadata.0.name
+  node_pool                   = module.cluster.node_pools.preemptible
   database_password_default   = var.athene2_database_password_default
   database_host               = module.mysql.database_private_ip_address
   gcloud_service_account_key  = module.gcloud_dbdump_reader.account_key
@@ -75,13 +85,14 @@ module "athene2_dbsetup" {
 }
 
 module "gcloud_dbdump_reader" {
-  source = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_dbdump_reader?ref=v3.0.0"
+  source = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_dbdump_reader?ref=v4.0.0"
 }
 
 module "ingress-nginx" {
-  source = "github.com/serlo/infrastructure-modules-shared.git//ingress-nginx?ref=v6.0.0"
+  source = "github.com/serlo/infrastructure-modules-shared.git//ingress-nginx?ref=v11.0.0"
 
   namespace   = kubernetes_namespace.ingress_nginx_namespace.metadata.0.name
+  node_pool   = module.cluster.node_pools.non-preemptible
   ip          = module.cluster.address
   domain      = "*.${local.domain}"
   nginx_image = "quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.24.1"

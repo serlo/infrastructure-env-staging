@@ -12,11 +12,12 @@ locals {
 }
 
 module "hydra" {
-  source = "github.com/serlo/infrastructure-modules-shared.git//hydra?ref=v6.0.0"
+  source = "github.com/serlo/infrastructure-modules-shared.git//hydra?ref=v11.0.0"
 
   namespace     = kubernetes_namespace.hydra_namespace.metadata.0.name
   chart_version = local.hydra.chart_version
   image_tag     = local.hydra.image_tag
+  node_pool     = module.cluster.node_pools.preemptible
 
   # TODO: add extra user for hydra
   dsn         = "postgres://${module.kpi.kpi_database_username_default}:${var.kpi_kpi_database_password_default}@${module.gcloud_postgres.database_private_ip_address}/hydra"
@@ -27,11 +28,12 @@ module "hydra" {
 }
 
 module "keycloak" {
-  source = "github.com/serlo/infrastructure-modules-shared.git//keycloak?ref=v10.0.0"
+  source = "github.com/serlo/infrastructure-modules-shared.git//keycloak?ref=v11.0.0"
 
   namespace     = kubernetes_namespace.keycloak_namespace.metadata.0.name
   chart_version = local.keycloak.chart_version
   image_tag     = local.keycloak.image_tag
+  node_pool     = module.cluster.node_pools.non-preemptible
 
   host = "keycloak.${local.domain}"
   # TODO: add extra user for keycloak

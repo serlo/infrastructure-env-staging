@@ -12,11 +12,12 @@ locals {
 }
 
 module "data_wallet" {
-  source = "github.com/serlo/infrastructure-modules-shared.git//enmeshed?ref=v10.0.1"
+  source = "github.com/serlo/infrastructure-modules-shared.git//enmeshed?ref=v11.0.0"
 
   namespace              = kubernetes_namespace.data_wallet_namespace.metadata.0.name
   chart_versions         = local.data_wallet.chart_versions
   image_tags             = local.data_wallet.image_tags
+  node_pool              = module.cluster.node_pools.non-preemptible
   host                   = "enmeshed.${local.domain}"
   platform_client_id     = var.enmeshed_platform_client_id
   platform_client_secret = var.enmeshed_platform_client_secret
@@ -31,7 +32,7 @@ resource "kubernetes_namespace" "data_wallet_namespace" {
 }
 
 module "enmeshed_ingress" {
-  source = "github.com/serlo/infrastructure-modules-shared.git//ingress?ref=v9.0.0"
+  source = "github.com/serlo/infrastructure-modules-shared.git//ingress?ref=v11.0.0"
 
   name      = "enmeshed"
   namespace = kubernetes_namespace.data_wallet_namespace.metadata.0.name

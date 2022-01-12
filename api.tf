@@ -9,19 +9,21 @@ locals {
 }
 
 module "api_redis" {
-  source = "github.com/serlo/infrastructure-modules-shared.git//redis?ref=v6.0.0"
+  source = "github.com/serlo/infrastructure-modules-shared.git//redis?ref=v11.0.0"
 
   namespace     = kubernetes_namespace.api_namespace.metadata.0.name
   chart_version = "12.6.2"
   image_tag     = "6.0.10"
+  node_pool     = module.cluster.node_pools.non-preemptible
 }
 
 module "api" {
-  source = "github.com/serlo/infrastructure-modules-api.git//?ref=v7.0.1"
+  source = "github.com/serlo/infrastructure-modules-api.git//?ref=v8.0.0"
 
   namespace         = kubernetes_namespace.api_namespace.metadata.0.name
   image_tag         = local.api.image_tags.server
   image_pull_policy = "IfNotPresent"
+  node_pool         = module.cluster.node_pools.non-preemptible
 
   environment = "staging"
 
@@ -73,7 +75,7 @@ module "api" {
 }
 
 module "api_server_ingress" {
-  source = "github.com/serlo/infrastructure-modules-shared.git//ingress?ref=v9.0.0"
+  source = "github.com/serlo/infrastructure-modules-shared.git//ingress?ref=v11.0.0"
 
   name      = "api"
   namespace = kubernetes_namespace.api_namespace.metadata.0.name
