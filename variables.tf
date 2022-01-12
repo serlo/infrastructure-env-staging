@@ -82,14 +82,6 @@ variable "api_swr_queue_dashboard_password" {
   type = string
 }
 
-variable "github" {
-  description = "GitHub OAuth Client"
-  type = object({
-    client_id     = string
-    client_secret = string
-  })
-}
-
 variable "enmeshed_platform_client_id" {
   type = string
 }

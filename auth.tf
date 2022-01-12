@@ -1,10 +1,8 @@
 locals {
-
   hydra = {
     chart_version = "0.21.5"
     image_tag     = "v1.10.7"
   }
-
   keycloak = {
     chart_version = "5.2.0"
     image_tag     = "14.0.0"

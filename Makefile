@@ -11,4 +11,3 @@ export postgres_instance=10072019-2
 
 include mk/gcloud.mk
 include mk/terraform.mk
-

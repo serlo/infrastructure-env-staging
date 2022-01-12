@@ -1,6 +1,7 @@
 # Staging-Infrastructure for Serlo
 
 ## Introduction
+
 Serlo's infrastructure is based on Terraform, Kubernetes and the Google Cloud Platform.
 
 We currently support the following environments:
