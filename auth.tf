@@ -10,7 +10,7 @@ locals {
 }
 
 module "hydra" {
-  source = "github.com/serlo/infrastructure-modules-shared.git//hydra?ref=v11.0.0"
+  source = "github.com/serlo/infrastructure-modules-shared.git//hydra?ref=v11.0.2"
 
   namespace     = kubernetes_namespace.hydra_namespace.metadata.0.name
   chart_version = local.hydra.chart_version
@@ -26,7 +26,7 @@ module "hydra" {
 }
 
 module "keycloak" {
-  source = "github.com/serlo/infrastructure-modules-shared.git//keycloak?ref=v11.0.0"
+  source = "github.com/serlo/infrastructure-modules-shared.git//keycloak?ref=v11.0.2"
 
   namespace     = kubernetes_namespace.keycloak_namespace.metadata.0.name
   chart_version = local.keycloak.chart_version
