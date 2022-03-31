@@ -74,7 +74,7 @@ module "gcloud_postgres" {
 }
 
 module "athene2_dbsetup" {
-  source                      = "github.com/serlo/infrastructure-modules-serlo.org.git//athene2_dbsetup?ref=v4.0.0"
+  source                      = "github.com/serlo/infrastructure-modules-serlo.org.git//athene2_dbsetup?ref=v4.0.1"
   namespace                   = kubernetes_namespace.serlo_org_namespace.metadata.0.name
   node_pool                   = module.cluster.node_pools.preemptible
   database_password_default   = var.athene2_database_password_default
