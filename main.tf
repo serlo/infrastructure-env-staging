@@ -89,7 +89,7 @@ module "gcloud_dbdump_reader" {
 }
 
 module "ingress-nginx" {
-  source = "github.com/serlo/infrastructure-modules-shared.git//ingress-nginx?ref=v12.0.0"
+  source = "github.com/serlo/infrastructure-modules-shared.git//ingress-nginx?ref=v12.0.1"
 
   namespace   = kubernetes_namespace.ingress_nginx_namespace.metadata.0.name
   node_pool   = module.cluster.node_pools.non-preemptible
