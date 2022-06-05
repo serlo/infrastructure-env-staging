@@ -21,7 +21,7 @@ locals {
 # modules
 #####################################################################
 module "cluster" {
-  source   = "github.com/serlo/infrastructure-modules-gcloud.git//cluster?ref=v4.0.0"
+  source   = "github.com/serlo/infrastructure-modules-gcloud.git//cluster?ref=v5.0.0"
   name     = "${local.project}-cluster"
   project  = local.project
   location = local.zone
@@ -46,7 +46,7 @@ module "cluster" {
 }
 
 module "mysql" {
-  source                     = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_mysql?ref=v4.0.0"
+  source                     = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_mysql?ref=v5.0.0"
   database_instance_name     = local.mysql_database_instance_name
   database_version           = "MYSQL_5_7"
   database_connection_name   = "${local.project}:${local.region}:${local.mysql_database_instance_name}"
@@ -59,7 +59,7 @@ module "mysql" {
 }
 
 module "gcloud_postgres" {
-  source                   = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_postgres?ref=v4.0.0"
+  source                   = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_postgres?ref=v5.0.0"
   database_instance_name   = local.kpi_database_instance_name
   database_connection_name = "${local.project}:${local.region}:${local.kpi_database_instance_name}"
   database_region          = local.region
@@ -74,7 +74,7 @@ module "gcloud_postgres" {
 }
 
 module "athene2_dbsetup" {
-  source                      = "github.com/serlo/infrastructure-modules-serlo.org.git//athene2_dbsetup?ref=v4.0.1"
+  source                      = "github.com/serlo/infrastructure-modules-serlo.org.git//athene2_dbsetup?ref=v5.0.0"
   namespace                   = kubernetes_namespace.serlo_org_namespace.metadata.0.name
   node_pool                   = module.cluster.node_pools.preemptible
   database_password_default   = var.athene2_database_password_default
@@ -85,11 +85,11 @@ module "athene2_dbsetup" {
 }
 
 module "gcloud_dbdump_reader" {
-  source = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_dbdump_reader?ref=v4.0.0"
+  source = "github.com/serlo/infrastructure-modules-gcloud.git//gcloud_dbdump_reader?ref=v5.0.0"
 }
 
 module "ingress-nginx" {
-  source = "github.com/serlo/infrastructure-modules-shared.git//ingress-nginx?ref=v11.0.2"
+  source = "github.com/serlo/infrastructure-modules-shared.git//ingress-nginx?ref=v12.0.0"
 
   namespace   = kubernetes_namespace.ingress_nginx_namespace.metadata.0.name
   node_pool   = module.cluster.node_pools.non-preemptible
@@ -99,7 +99,7 @@ module "ingress-nginx" {
 }
 
 module "cloudflare" {
-  source  = "github.com/serlo/infrastructure-modules-env-shared.git//cloudflare?ref=v4.1.0"
+  source  = "github.com/serlo/infrastructure-modules-env-shared.git//cloudflare?ref=v5.0.0"
   domain  = local.domain
   ip      = module.cluster.address
   zone_id = "0067b08b108fbcf88ddaeaae4ac3d6ac"
