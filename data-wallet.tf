@@ -32,7 +32,7 @@ resource "kubernetes_namespace" "data_wallet_namespace" {
 }
 
 module "enmeshed_ingress" {
-  source = "github.com/serlo/infrastructure-modules-shared.git//ingress?ref=v12.0.0"
+  source = "github.com/serlo/infrastructure-modules-shared.git//ingress?ref=v13.1.0"
 
   name      = "enmeshed"
   namespace = kubernetes_namespace.data_wallet_namespace.metadata.0.name
