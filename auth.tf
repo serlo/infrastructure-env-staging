@@ -9,7 +9,7 @@ locals {
   }
 
   kratos = {
-    image_tag = "v0.9.0-alpha.2"
+    image_tag = "v0.10.1"
   }
 
   keycloak = {
