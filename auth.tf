@@ -1,7 +1,4 @@
 locals {
-  # TODO: not sure if it is a good idea to update hydra and kratos at the same time
-  # in v0.23.2 the admin container takes long to be ready, which leads to a timeout in terraform
-  # and terraform thinks it is tainted
   ory_chart_version = "0.23.2"
 
   hydra = {
