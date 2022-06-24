@@ -1,12 +1,12 @@
 locals {
-  ory_chart_version = "0.23.2"
+  ory_chart_version = "0.23.3"
 
   hydra = {
     image_tag = "v1.11.8"
   }
 
   kratos = {
-    image_tag = "v0.9.0-alpha.2"
+    image_tag = "v0.10.1"
   }
 
   keycloak = {
@@ -32,8 +32,7 @@ module "hydra" {
 }
 
 module "kratos" {
-  # TODO: use a tag when released
-  source = "github.com/serlo/infrastructure-modules-shared.git//kratos?ref=kratos"
+  source = "github.com/serlo/infrastructure-modules-shared.git//kratos?ref=v14.1.0"
 
   namespace = kubernetes_namespace.kratos_namespace.metadata.0.name
   # TODO: add extra user for kratos
