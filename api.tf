@@ -1,8 +1,7 @@
 locals {
   api = {
     image_tags = {
-      # TODO: upgrade to 0.3.52, UserCreateMutation
-      database_layer = "0.3.51"
+      database_layer = "0.3.52"
       server         = "0.43.0-staging.1"
       cache_worker   = "0.4.2"
     }
