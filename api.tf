@@ -55,7 +55,9 @@ module "api" {
   }
 
   server = {
-    hydra_host = module.hydra.admin_uri
+    hydra_host  = module.hydra.admin_uri
+    kratos_host = module.kratos.admin_uri
+
     swr_queue_dashboard = {
       username = var.api_swr_queue_dashboard_username
       password = var.api_swr_queue_dashboard_password
