@@ -2,7 +2,10 @@
 
 set -e
 
-git stash
+if [ -n "$(git diff HEAD)" ]; then
+  error "There are uncommitted changes in your workspace. Stash or commit them"
+fi
+
 git checkout main
 git pull
 
@@ -32,4 +35,3 @@ echo "Take a look at the changelogs for that"
 firefox https://github.com/serlo/api.serlo.org/blob/main/CHANGELOG.md
 firefox https://github.com/serlo/serlo.org-database-layer/blob/main/CHANGELOG.md
 
-git stash pop
