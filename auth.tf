@@ -16,7 +16,7 @@ locals {
 }
 
 module "hydra" {
-  source = "github.com/serlo/infrastructure-modules-shared.git//hydra?ref=v14.2.5"
+  source = "github.com/serlo/infrastructure-modules-shared.git//hydra?ref=v14.2.8"
 
   namespace     = kubernetes_namespace.hydra_namespace.metadata.0.name
   chart_version = local.ory_chart_version
@@ -26,13 +26,13 @@ module "hydra" {
   # TODO: add extra user for hydra
   dsn         = "postgres://${module.kpi.kpi_database_username_default}:${var.kpi_kpi_database_password_default}@${module.gcloud_postgres.database_private_ip_address}/hydra"
   url_login   = "http://localhost:3000/api/hydra/login"
-  url_logout  = "http://localhost:3000/api/hydra/logout" # TODO
+  url_logout  = "http://localhost:3000/api/hydra/logout"
   url_consent = "http://localhost:3000/api/hydra/consent"
   host        = "hydra.${local.domain}"
 }
 
 module "kratos" {
-  source = "github.com/serlo/infrastructure-modules-shared.git//kratos?ref=v14.2.5"
+  source = "github.com/serlo/infrastructure-modules-shared.git//kratos?ref=v14.2.8"
 
   namespace = kubernetes_namespace.kratos_namespace.metadata.0.name
   # TODO: add extra user for kratos
@@ -46,8 +46,26 @@ module "kratos" {
 
 }
 
+module "kratos-import-users" {
+  source    = "github.com/serlo/infrastructure-modules-shared.git//kratos-import-users?ref=v14.2.8"
+  namespace = kubernetes_namespace.kratos_namespace.metadata.0.name
+  node_pool = module.cluster.node_pools.non-preemptible
+  schedule  = "0 4 * * *"
+  depends_on = [
+    module.kratos
+  ]
+  database = {
+    host     = module.mysql.database_private_ip_address
+    username = "serlo_readonly"
+    password = var.athene2_database_password_readonly
+    name     = "serlo"
+  }
+  # any way to get this service name dynamically from kratos helm chart?
+  kratos_host = "http://kratos-admin"
+}
+
 module "keycloak" {
-  source = "github.com/serlo/infrastructure-modules-shared.git//keycloak?ref=v14.2.5"
+  source = "github.com/serlo/infrastructure-modules-shared.git//keycloak?ref=v14.2.8"
 
   namespace     = kubernetes_namespace.keycloak_namespace.metadata.0.name
   chart_version = local.keycloak.chart_version
