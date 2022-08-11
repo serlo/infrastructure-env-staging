@@ -16,7 +16,7 @@ locals {
 }
 
 module "hydra" {
-  source = "github.com/serlo/infrastructure-modules-shared.git//hydra?ref=v14.2.8"
+  source = "github.com/serlo/infrastructure-modules-shared.git//hydra?ref=v14.2.10"
 
   namespace     = kubernetes_namespace.hydra_namespace.metadata.0.name
   chart_version = local.ory_chart_version
@@ -32,13 +32,12 @@ module "hydra" {
 }
 
 module "kratos" {
-  source = "github.com/serlo/infrastructure-modules-shared.git//kratos?ref=v14.2.8"
+  source = "github.com/serlo/infrastructure-modules-shared.git//kratos?ref=v14.2.10"
 
   namespace = kubernetes_namespace.kratos_namespace.metadata.0.name
   # TODO: add extra user for kratos
-  dsn  = "postgres://${module.kpi.kpi_database_username_default}:${var.kpi_kpi_database_password_default}@${module.gcloud_postgres.database_private_ip_address}/kratos"
-  host = "kratos.${local.domain}"
-  # TODO: rename
+  dsn           = "postgres://${module.kpi.kpi_database_username_default}:${var.kpi_kpi_database_password_default}@${module.gcloud_postgres.database_private_ip_address}/kratos"
+  host          = "kratos.${local.domain}"
   smtp_password = var.athene2_php_smtp_password
   chart_version = local.ory_chart_version
   image_tag     = local.kratos.image_tag
@@ -47,7 +46,7 @@ module "kratos" {
 }
 
 module "kratos-import-users" {
-  source    = "github.com/serlo/infrastructure-modules-shared.git//kratos-import-users?ref=v14.2.8"
+  source    = "github.com/serlo/infrastructure-modules-shared.git//kratos-import-users?ref=v14.2.10"
   namespace = kubernetes_namespace.kratos_namespace.metadata.0.name
   node_pool = module.cluster.node_pools.non-preemptible
   schedule  = "0 4 * * *"
@@ -65,7 +64,7 @@ module "kratos-import-users" {
 }
 
 module "keycloak" {
-  source = "github.com/serlo/infrastructure-modules-shared.git//keycloak?ref=v14.2.8"
+  source = "github.com/serlo/infrastructure-modules-shared.git//keycloak?ref=v14.2.10"
 
   namespace     = kubernetes_namespace.keycloak_namespace.metadata.0.name
   chart_version = local.keycloak.chart_version
