@@ -25,9 +25,9 @@ module "hydra" {
 
   # TODO: add extra user for hydra
   dsn         = "postgres://${module.kpi.kpi_database_username_default}:${var.kpi_kpi_database_password_default}@${module.gcloud_postgres.database_private_ip_address}/hydra"
-  url_login   = "http://localhost:3000/api/hydra/login"
-  url_logout  = "http://localhost:3000/api/hydra/logout"
-  url_consent = "http://localhost:3000/api/hydra/consent"
+  url_login   = "https://api.serlo-staging.dev/hydra/login"
+  url_logout  = "https://api.serlo-staging.dev/hydra/logout"
+  url_consent = "https://api.serlo-staging.dev/hydra/consent"
   host        = "hydra.${local.domain}"
 }
 

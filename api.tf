@@ -2,7 +2,7 @@ locals {
   api = {
     image_tags = {
       database_layer = "0.3.53"
-      server         = "0.46.0-staging.0"
+      server         = "0.47.0-staging.3"
       cache_worker   = "0.4.2"
     }
   }
@@ -55,8 +55,9 @@ module "api" {
   }
 
   server = {
-    hydra_host    = module.hydra.admin_uri
-    kratos_host   = module.kratos.admin_uri
+    hydra_host = module.hydra.admin_uri
+    # TODO: refactor to use something like module.hydra.public_uri
+    kratos_host   = "http://kratos-public.kratos"
     kratos_secret = module.kratos.secret
 
     swr_queue_dashboard = {
