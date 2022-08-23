@@ -56,7 +56,7 @@ module "api" {
 
   server = {
     hydra_host = module.hydra.admin_uri
-    # TODO: refactor to use something like module.hydra.public_uri
+    # TODO: refactor to use something like module.kratos.public_uri
     kratos_host   = "http://kratos-public.kratos"
     kratos_secret = module.kratos.secret
 
