@@ -2,7 +2,7 @@ locals {
   api = {
     image_tags = {
       database_layer = "0.3.53"
-      server         = "0.47.0-staging.3"
+      server         = "0.47.0-staging.4"
       cache_worker   = "0.4.2"
     }
   }
@@ -18,7 +18,7 @@ module "api_redis" {
 }
 
 module "api" {
-  source = "github.com/serlo/infrastructure-modules-api.git//?ref=v9.2.1"
+  source = "github.com/serlo/infrastructure-modules-api.git//?ref=v9.2.2"
 
   namespace         = kubernetes_namespace.api_namespace.metadata.0.name
   image_tag         = local.api.image_tags.server
@@ -55,10 +55,10 @@ module "api" {
   }
 
   server = {
-    hydra_host = module.hydra.admin_uri
-    # TODO: refactor to use something like module.kratos.public_uri
-    kratos_host   = "http://kratos-public.kratos"
-    kratos_secret = module.kratos.secret
+    hydra_host         = module.hydra.admin_uri
+    kratos_public_host = module.kratos.public_uri
+    kratos_admin_host  = module.kratos.admin_uri
+    kratos_secret      = module.kratos.secret
 
     swr_queue_dashboard = {
       username = var.api_swr_queue_dashboard_username
