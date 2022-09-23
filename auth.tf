@@ -37,6 +37,7 @@ module "kratos" {
   smtp_password = var.athene2_php_smtp_password
   chart_version = local.ory_chart_version
   image_tag     = local.kratos.image_tag
+  domain        = local.domain
 }
 
 resource "kubernetes_namespace" "hydra_namespace" {
