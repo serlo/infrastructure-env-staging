@@ -81,16 +81,3 @@ variable "api_swr_queue_dashboard_username" {
 variable "api_swr_queue_dashboard_password" {
   type = string
 }
-
-variable "enmeshed_platform_client_id" {
-  type = string
-}
-
-variable "enmeshed_platform_client_secret" {
-  type = string
-}
-
-variable "enmeshed_api_key" {
-  description = "API key the Enmeshed Connector uses to authenticate requests."
-  type        = string
-}
