@@ -8,11 +8,6 @@ locals {
   kratos = {
     image_tag = "v0.10.1"
   }
-
-  keycloak = {
-    chart_version = "5.2.0"
-    image_tag     = "14.0.0"
-  }
 }
 
 module "hydra" {
@@ -44,25 +39,6 @@ module "kratos" {
   image_tag     = local.kratos.image_tag
 }
 
-module "keycloak" {
-  source = "github.com/serlo/infrastructure-modules-shared.git//keycloak?ref=v13.1.0"
-
-  namespace     = kubernetes_namespace.keycloak_namespace.metadata.0.name
-  chart_version = local.keycloak.chart_version
-  image_tag     = local.keycloak.image_tag
-  node_pool     = module.cluster.node_pools.non-preemptible
-
-  host = "keycloak.${local.domain}"
-  # TODO: add extra user for keycloak
-  database = {
-    host     = module.gcloud_postgres.database_private_ip_address
-    user     = module.kpi.kpi_database_username_default
-    password = var.kpi_kpi_database_password_default
-    database = "keycloak"
-  }
-}
-
-
 resource "kubernetes_namespace" "hydra_namespace" {
   metadata {
     name = "hydra"
@@ -72,11 +48,5 @@ resource "kubernetes_namespace" "hydra_namespace" {
 resource "kubernetes_namespace" "kratos_namespace" {
   metadata {
     name = "kratos"
-  }
-}
-
-resource "kubernetes_namespace" "keycloak_namespace" {
-  metadata {
-    name = "keycloak"
   }
 }
