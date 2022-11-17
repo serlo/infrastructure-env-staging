@@ -6,7 +6,7 @@ locals {
   }
 
   kratos = {
-    image_tag = "v0.10.1"
+    image_tag = "next"
   }
 }
 
