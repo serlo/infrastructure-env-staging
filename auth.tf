@@ -38,25 +38,24 @@ module "kratos" {
   image_tag     = local.kratos.image_tag
   domain        = local.domain
 }
+module "kratos-import-users" {
+  source = "github.com/serlo/infrastructure-modules-shared.git//kratos-import-users?ref=v15.1.0"
 
-# TODO: letting it commented whereas we don't work on this module
-# module "kratos-import-users" {
-#   source    = "github.com/serlo/infrastructure-modules-shared.git//kratos-import-users?ref=v14.2.10"
-#   namespace = kubernetes_namespace.kratos_namespace.metadata.0.name
-#   node_pool = module.cluster.node_pools.non-preemptible
-#   schedule  = "0 4 * * *"
-#   depends_on = [
-#     module.kratos
-#   ]
-#   database = {
-#     host     = module.mysql.database_private_ip_address
-#     username = "serlo_readonly"
-#     password = var.athene2_database_password_readonly
-#     name     = "serlo"
-#   }
-#   # any way to get this service name dynamically from kratos helm chart?
-#   kratos_host = "http://kratos-admin"
-# }
+  namespace = kubernetes_namespace.kratos_namespace.metadata.0.name
+  node_pool = module.cluster.node_pools.non-preemptible
+  schedule  = "0 3 * * *"
+  depends_on = [
+    module.kratos
+  ]
+  database = {
+    host     = module.mysql.database_private_ip_address
+    username = "serlo_readonly"
+    password = var.athene2_database_password_readonly
+    name     = "serlo"
+  }
+  # any way to get this service name dynamically from kratos helm chart?
+  kratos_host = "http://kratos-admin"
+}
 
 resource "kubernetes_namespace" "hydra_namespace" {
   metadata {
