@@ -11,7 +11,7 @@ locals {
 }
 
 module "hydra" {
-  source = "github.com/serlo/infrastructure-modules-shared.git//hydra?ref=v15.1.1"
+  source = "github.com/serlo/infrastructure-modules-shared.git//hydra?ref=v15.1.2"
 
   namespace     = kubernetes_namespace.hydra_namespace.metadata.0.name
   chart_version = local.ory_chart_version
@@ -27,7 +27,7 @@ module "hydra" {
 }
 
 module "kratos" {
-  source = "github.com/serlo/infrastructure-modules-shared.git//kratos?ref=v15.1.1"
+  source = "github.com/serlo/infrastructure-modules-shared.git//kratos?ref=v15.1.2"
 
   namespace = kubernetes_namespace.kratos_namespace.metadata.0.name
   # TODO: add extra user for kratos
@@ -39,7 +39,7 @@ module "kratos" {
   domain        = local.domain
 }
 module "kratos-import-users" {
-  source = "github.com/serlo/infrastructure-modules-shared.git//kratos-import-users?ref=v15.1.1"
+  source = "github.com/serlo/infrastructure-modules-shared.git//kratos-import-users?ref=v15.1.2"
 
   namespace = kubernetes_namespace.kratos_namespace.metadata.0.name
   node_pool = module.cluster.node_pools.non-preemptible
