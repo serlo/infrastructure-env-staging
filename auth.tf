@@ -39,7 +39,7 @@ module "kratos" {
   domain        = local.domain
 }
 module "kratos-import-users" {
-  source = "github.com/serlo/infrastructure-modules-shared.git//kratos-import-users?ref=v15.2.4"
+  source = "github.com/serlo/infrastructure-modules-shared.git//kratos-import-users?ref=v15.1.4"
 
   namespace = kubernetes_namespace.kratos_namespace.metadata.0.name
   node_pool = module.cluster.node_pools.non-preemptible
