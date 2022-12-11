@@ -20,9 +20,9 @@ module "hydra" {
 
   # TODO: add extra user for hydra
   dsn         = "postgres://${module.kpi.kpi_database_username_default}:${var.kpi_kpi_database_password_default}@${module.gcloud_postgres.database_private_ip_address}/hydra"
-  url_login   = "https://de.${local.domain}/auth/oauth/login"
-  url_logout  = "https://de.${local.domain}/auth/oauth/logout"
-  url_consent = "https://de.${local.domain}/auth/oauth/consent"
+  url_login   = "https://${local.domain}/auth/oauth/login"
+  url_logout  = "https://${local.domain}/auth/oauth/logout"
+  url_consent = "https://${local.domain}/auth/oauth/consent"
   host        = "hydra.${local.domain}"
 }
 
