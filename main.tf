@@ -11,7 +11,7 @@ locals {
   region = "europe-west3"
   zone   = "europe-west3-a"
 
-  cluster_machine_type = "n1-highcpu-2"
+  cluster_machine_type = "n1-highcpu-4"
 
   mysql_database_instance_name = "${local.project}-mysql-2021-07-15"
   kpi_database_instance_name   = "${local.project}-postgres-2020-01-19-3"
