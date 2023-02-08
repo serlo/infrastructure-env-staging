@@ -1,6 +1,3 @@
-#####################################################################
-# variables for staging environment
-#####################################################################
 variable "athene2_database_password_default" {
   description = "Password for default username in athene2 database."
 }
@@ -11,6 +8,10 @@ variable "athene2_database_password_readonly" {
 
 variable "kpi_grafana_admin_password" {
   description = "Admin password for grafana."
+}
+
+variable "postgres_database_username_default" {
+  default = "serlo"
 }
 
 variable "kpi_kpi_database_password_postgres" {

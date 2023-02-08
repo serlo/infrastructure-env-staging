@@ -1,6 +1,3 @@
-#####################################################################
-# settings for staging
-#####################################################################
 locals {
   domain  = "serlo-staging.dev"
   project = "serlo-staging"
@@ -15,11 +12,11 @@ locals {
 
   mysql_database_instance_name = "${local.project}-mysql-2021-07-15"
   kpi_database_instance_name   = "${local.project}-postgres-2020-01-19-3"
+
+  postgres_database_username_default  = "serlo"
+  postgres_database_username_readonly = "serlo_readonly"
 }
 
-#####################################################################
-# modules
-#####################################################################
 module "cluster" {
   source   = "github.com/serlo/infrastructure-modules-gcloud.git//cluster?ref=v5.0.1"
   name     = "${local.project}-cluster"
@@ -67,9 +64,9 @@ module "gcloud_postgres" {
   database_private_network = module.cluster.network
 
   database_password_postgres = var.kpi_kpi_database_password_postgres
-  database_username_default  = module.kpi.kpi_database_username_default
+  database_username_default  = local.postgres_database_username_default
   database_password_default  = var.kpi_kpi_database_password_default
-  database_username_readonly = module.kpi.kpi_database_username_readonly
+  database_username_readonly = local.postgres_database_username_readonly
   database_password_readonly = var.kpi_kpi_database_password_readonly
 }
 
