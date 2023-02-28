@@ -71,14 +71,25 @@ module "gcloud_postgres" {
 }
 
 module "athene2_dbsetup" {
-  source                      = "github.com/serlo/infrastructure-modules-serlo.org.git//athene2_dbsetup?ref=v5.0.0"
-  namespace                   = kubernetes_namespace.serlo_org_namespace.metadata.0.name
-  node_pool                   = module.cluster.node_pools.preemptible
-  database_password_default   = var.athene2_database_password_default
-  database_host               = module.mysql.database_private_ip_address
-  gcloud_service_account_key  = module.gcloud_dbdump_reader.account_key
-  gcloud_service_account_name = module.gcloud_dbdump_reader.account_name
-  dbsetup_image               = "eu.gcr.io/serlo-shared/athene2-dbsetup-cronjob:2.0.1"
+  source    = "github.com/serlo/infrastructure-modules-serlo.org.git//athene2_dbsetup?ref=v7.1.0"
+  image     = "eu.gcr.io/serlo-shared/athene2-dbsetup-cronjob:3.0.3"
+  namespace = kubernetes_namespace.serlo_org_namespace.metadata.0.name
+  node_pool = module.cluster.node_pools.preemptible
+  schedule  = "0 1 * * *"
+  mysql = {
+    host     = module.mysql.database_private_ip_address
+    username = "serlo"
+    password = var.athene2_database_password_default
+  }
+  postgres = {
+    host     = module.gcloud_postgres.database_private_ip_address
+    password = var.kpi_kpi_database_password_default
+  }
+  bucket = {
+    url                  = "gs://anonymous-data"
+    service_account_key  = module.gcloud_dbdump_reader.account_key
+    service_account_name = module.gcloud_dbdump_reader.account_name
+  }
 }
 
 module "gcloud_dbdump_reader" {
