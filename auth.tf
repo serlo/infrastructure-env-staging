@@ -26,7 +26,7 @@ module "hydra" {
 }
 
 module "kratos" {
-  source = "github.com/serlo/infrastructure-modules-shared.git//kratos?ref=v15.4.0"
+  source = "github.com/serlo/infrastructure-modules-shared.git//kratos?ref=31-kratos-use-more-up-to-date-image"
 
   namespace     = kubernetes_namespace.kratos_namespace.metadata.0.name
   dsn           = "postgres://${local.postgres_database_username_default}:${var.kpi_kpi_database_password_default}@${module.gcloud_postgres.database_private_ip_address}/kratos"
