@@ -11,7 +11,7 @@ locals {
 }
 
 module "hydra" {
-  source = "github.com/serlo/infrastructure-modules-shared.git//hydra?ref=v15.6.1"
+  source = "github.com/serlo/infrastructure-modules-shared.git//hydra?ref=v15.7.0"
 
   namespace     = kubernetes_namespace.hydra_namespace.metadata.0.name
   chart_version = local.ory_chart_version
@@ -26,15 +26,16 @@ module "hydra" {
 }
 
 module "kratos" {
-  source = "github.com/serlo/infrastructure-modules-shared.git//kratos?ref=v15.6.1"
+  source = "github.com/serlo/infrastructure-modules-shared.git//kratos?ref=v15.7.0"
 
-  namespace     = kubernetes_namespace.kratos_namespace.metadata.0.name
-  dsn           = "postgres://${local.postgres_database_username_default}:${var.kpi_kpi_database_password_default}@${module.gcloud_postgres.database_private_ip_address}/kratos"
-  host          = "kratos.${local.domain}"
-  smtp_password = var.athene2_php_smtp_password
-  chart_version = local.ory_chart_version
-  image_tag     = local.kratos.image_tag
-  domain        = local.domain
+  namespace         = kubernetes_namespace.kratos_namespace.metadata.0.name
+  dsn               = "postgres://${local.postgres_database_username_default}:${var.kpi_kpi_database_password_default}@${module.gcloud_postgres.database_private_ip_address}/kratos"
+  host              = "kratos.${local.domain}"
+  smtp_password     = var.athene2_php_smtp_password
+  chart_version     = local.ory_chart_version
+  image_tag         = local.kratos.image_tag
+  domain            = local.domain
+  nbp_client_secret = var.kratos_nbp_client_secret
 }
 
 resource "kubernetes_namespace" "hydra_namespace" {
