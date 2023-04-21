@@ -93,3 +93,33 @@ resource "kubernetes_namespace" "api_namespace" {
     name = "api"
   }
 }
+
+module "kpi_dashboard" {
+  source    = "github.com/serlo/infrastructure-modules-kpi.git//dashboard?ref=v6.2.2"
+  image_tag = "0.5"
+  node_pool = module.cluster.node_pools.preemptible
+  mysql_database = {
+    host     = module.mysql.database_private_ip_address
+    password = var.athene2_database_password_readonly
+  }
+  postgres_database = {
+    host     = module.gcloud_postgres.database_private_ip_address
+    password = var.kpi_kpi_database_password_readonly
+  }
+}
+
+module "kpi_dashboard_ingress" {
+  source = "github.com/serlo/infrastructure-modules-shared.git//ingress?ref=v13.2.0"
+
+  name = "kpi-dashboard"
+  // it shoudl go to namespace kpi in production
+  namespace = "api"
+
+  host = "kpi-dashboard.${local.domain}"
+  backend = {
+    service_name = module.kpi_dashboard.dashboard_service_name
+    service_port = module.kpi_dashboard.dashboard_service_port
+  }
+  enable_tls  = true
+  enable_cors = true
+}
