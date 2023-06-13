@@ -19,7 +19,7 @@ module "api_redis" {
 }
 
 module "api" {
-  source = "github.com/serlo/infrastructure-modules-api.git//?ref=19-db-migration-job"
+  source = "github.com/serlo/infrastructure-modules-api.git//?ref=v10.3.0"
 
   namespace         = kubernetes_namespace.api_namespace.metadata.0.name
   image_tag         = local.api.image_tags.server
