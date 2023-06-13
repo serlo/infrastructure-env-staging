@@ -1,9 +1,10 @@
 locals {
   api = {
     image_tags = {
-      database_layer = "0.3.64"
-      server         = "0.50.1"
-      cache_worker   = "0.4.2"
+      database_layer   = "0.3.64"
+      server           = "0.50.1"
+      cache_worker     = "0.4.2"
+      api_db_migration = "0.1.0"
     }
   }
 }
@@ -18,7 +19,7 @@ module "api_redis" {
 }
 
 module "api" {
-  source = "github.com/serlo/infrastructure-modules-api.git//?ref=v10.1.0"
+  source = "github.com/serlo/infrastructure-modules-api.git//?ref=v10.3.0"
 
   namespace         = kubernetes_namespace.api_namespace.metadata.0.name
   image_tag         = local.api.image_tags.server
@@ -54,13 +55,19 @@ module "api" {
     sentry_dsn               = "https://849cde772c90451c807ed96a318a935a@o115070.ingest.sentry.io/5649015"
   }
 
-  server = {
-    hydra_host         = module.hydra.admin_uri
-    kratos_public_host = module.kratos.public_uri
-    kratos_admin_host  = module.kratos.admin_uri
-    kratos_secret      = module.kratos.secret
-    kratos_db_uri      = "postgres://${local.postgres_database_username_default}:${var.kpi_kpi_database_password_default}@${module.gcloud_postgres.database_private_ip_address}/kratos"
+  api_db_migration = {
+    image_tag = local.api.image_tags.api_db_migration
 
+    database_url = "mysql://serlo:${var.athene2_database_password_default}@${module.mysql.database_private_ip_address}:3306/serlo"
+  }
+
+  server = {
+    hydra_host                = module.hydra.admin_uri
+    kratos_public_host        = module.kratos.public_uri
+    kratos_admin_host         = module.kratos.admin_uri
+    kratos_secret             = module.kratos.secret
+    kratos_db_uri             = "postgres://${local.postgres_database_username_default}:${var.kpi_kpi_database_password_default}@${module.gcloud_postgres.database_private_ip_address}/kratos"
+    notification_email_secret = "not sure we need this for staging"
     swr_queue_dashboard = {
       username = var.api_swr_queue_dashboard_username
       password = var.api_swr_queue_dashboard_password
