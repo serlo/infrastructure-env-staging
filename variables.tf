@@ -83,6 +83,9 @@ variable "api_swr_queue_dashboard_password" {
   type = string
 }
 
-variable "kratos_nbp_client_secret" {
-  type = string
+variable "kratos_nbp_client" {
+  type = object({
+    id     = string
+    secret = string
+  })
 }
