@@ -18,7 +18,7 @@ locals {
 }
 
 module "cluster" {
-  source   = "github.com/serlo/infrastructure-modules-gcloud.git//cluster?ref=v5.0.1"
+  source   = "github.com/serlo/infrastructure-modules-gcloud.git//cluster?ref=v5.3.0"
   name     = "${local.project}-cluster"
   project  = local.project
   location = local.zone
@@ -31,6 +31,7 @@ module "cluster" {
       initial_node_count = 2
       min_node_count     = 2
       max_node_count     = 10
+      location_policy    = "ANY"
     }
     non-preemptible = {
       machine_type       = local.cluster_machine_type
@@ -38,6 +39,7 @@ module "cluster" {
       initial_node_count = 0
       min_node_count     = 0
       max_node_count     = 10
+      location_policy    = "BALANCED"
     }
   }
 }
