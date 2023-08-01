@@ -73,7 +73,7 @@ module "gcloud_postgres" {
 }
 
 module "athene2_dbsetup" {
-  source    = "github.com/serlo/infrastructure-modules-serlo.org.git//athene2_dbsetup?ref=v7.1.0"
+  source    = "github.com/serlo/infrastructure-modules-serlo.org.git//athene2_dbsetup?ref=v7.1.1"
   image     = "eu.gcr.io/serlo-shared/athene2-dbsetup-cronjob:3.0.3"
   namespace = kubernetes_namespace.serlo_org_namespace.metadata.0.name
   node_pool = module.cluster.node_pools.preemptible
