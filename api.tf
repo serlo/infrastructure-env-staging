@@ -3,7 +3,6 @@ locals {
     image_tags = {
       database_layer   = "0.3.67"
       server           = "0.53.3"
-      cache_worker     = "0.4.2"
       api_db_migration = "0.2.0-staging.2"
     }
   }
@@ -19,7 +18,7 @@ module "api_redis" {
 }
 
 module "api" {
-  source = "github.com/serlo/infrastructure-modules-api.git//?ref=v10.5.2"
+  source = "github.com/serlo/infrastructure-modules-api.git//?ref=v11.0.0"
 
   namespace         = kubernetes_namespace.api_namespace.metadata.0.name
   image_tag         = local.api.image_tags.server
@@ -28,10 +27,6 @@ module "api" {
 
   environment = "staging"
 
-  cache_worker = {
-    enable_cronjob = true
-    image_tag      = local.api.image_tags.cache_worker
-  }
   google_spreadsheet_api = {
     active_donors = var.api_active_donors_google_spreadsheet_id
     motivation    = var.api_motivation_google_spreadsheet_id
