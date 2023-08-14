@@ -4,7 +4,7 @@ locals {
       database_layer   = "0.3.67"
       server           = "0.53.3"
       cache_worker     = "0.4.2"
-      api_db_migration = "0.1.0"
+      api_db_migration = "0.2.0-staging.2"
     }
   }
 }
@@ -19,7 +19,7 @@ module "api_redis" {
 }
 
 module "api" {
-  source = "github.com/serlo/infrastructure-modules-api.git//?ref=v10.5.1"
+  source = "github.com/serlo/infrastructure-modules-api.git//?ref=v10.5.2"
 
   namespace         = kubernetes_namespace.api_namespace.metadata.0.name
   image_tag         = local.api.image_tags.server
