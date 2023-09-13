@@ -89,3 +89,7 @@ variable "kratos_nbp_client" {
     secret = string
   })
 }
+
+variable "enmeshed_api_key" {
+  type = string
+}

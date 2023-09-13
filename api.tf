@@ -18,7 +18,7 @@ module "api_redis" {
 }
 
 module "api" {
-  source = "github.com/serlo/infrastructure-modules-api.git//?ref=v12.1.0"
+  source = "../infrastructure-modules-api/"
 
   namespace         = kubernetes_namespace.api_namespace.metadata.0.name
   image_tag         = local.api.image_tags.server
@@ -71,6 +71,9 @@ module "api" {
     }
     google_service_account = file("secrets/serlo-org-6bab84a1b1a5.json")
     sentry_dsn             = "https://dd6355782e894e048723194b237baa39@o115070.ingest.sentry.io/5385534"
+    # enmeshed_server_host   = "enmeshed_connector_helm_chart"
+    enmeshed_server_secret  = var.enmeshed_api_key
+    enmeshed_webhook_secret = var.enmeshed_api_key
   }
 
   swr_queue_worker = {
