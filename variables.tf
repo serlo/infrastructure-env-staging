@@ -90,7 +90,11 @@ variable "kratos_nbp_client" {
   })
 }
 
-variable "enmeshed_api_key" {
+variable "enmeshed_platform_client_id" {
+  type = string
+}
+
+variable "enmeshed_platform_client_secret" {
   type = string
 }
 

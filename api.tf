@@ -82,6 +82,19 @@ module "api" {
   }
 }
 
+module "enmeshed" {
+  // FIXME
+  source = "../infrastructure-modules-shared/enmeshed"
+
+  namespace              = kubernetes_namespace.api_namespace.metadata.0.name
+  chart_version          = "3.5.1"
+  transport_base_url     = "https://bkb-nmshd-preprod.nbpdev.de/"
+  platform_client_id     = var.enmeshed_platform_client_id
+  platform_client_secret = var.enmeshed_platform_client_secret
+  api_url                = "https://api.${local.domain}"
+  api_key                = var.enmeshed_api_key
+}
+
 module "api_server_ingress" {
   source = "github.com/serlo/infrastructure-modules-shared.git//ingress?ref=v13.1.0"
 
