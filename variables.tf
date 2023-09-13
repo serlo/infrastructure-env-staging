@@ -93,3 +93,8 @@ variable "kratos_nbp_client" {
 variable "enmeshed_api_key" {
   type = string
 }
+
+variable "enmeshed_api_key" {
+  description = "API key the Enmeshed Connector uses to authenticate requests."
+  type        = string
+}
