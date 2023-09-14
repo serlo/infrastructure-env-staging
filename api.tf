@@ -18,8 +18,7 @@ module "api_redis" {
 }
 
 module "api" {
-  # TODO: use a tag
-  source = "github.com/serlo/infrastructure-modules-api.git//?ref=enmeshed-env"
+  source = "github.com/serlo/infrastructure-modules-api.git//?ref=v12.2.0"
 
   namespace         = kubernetes_namespace.api_namespace.metadata.0.name
   image_tag         = local.api.image_tags.server
@@ -83,8 +82,7 @@ module "api" {
 }
 
 module "enmeshed" {
-  // FIXME
-  source = "../infrastructure-modules-shared/enmeshed"
+  source = "github.com/serlo/infrastructure-modules-shared.git//enmeshed?ref=v17.2.0"
 
   namespace              = kubernetes_namespace.api_namespace.metadata.0.name
   chart_version          = "3.5.1"
