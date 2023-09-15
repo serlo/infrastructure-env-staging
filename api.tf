@@ -2,7 +2,7 @@ locals {
   api = {
     image_tags = {
       database_layer   = "0.3.70"
-      server           = "0.56.0"
+      server           = "0.57.2"
       api_db_migration = "0.3.0"
     }
   }
@@ -18,7 +18,7 @@ module "api_redis" {
 }
 
 module "api" {
-  source = "github.com/serlo/infrastructure-modules-api.git//?ref=v12.1.0"
+  source = "github.com/serlo/infrastructure-modules-api.git//?ref=v12.2.0"
 
   namespace         = kubernetes_namespace.api_namespace.metadata.0.name
   image_tag         = local.api.image_tags.server
@@ -69,13 +69,28 @@ module "api" {
       username = var.api_swr_queue_dashboard_username
       password = var.api_swr_queue_dashboard_password
     }
-    google_service_account = file("secrets/serlo-org-6bab84a1b1a5.json")
-    sentry_dsn             = "https://dd6355782e894e048723194b237baa39@o115070.ingest.sentry.io/5385534"
+    google_service_account  = file("secrets/serlo-org-6bab84a1b1a5.json")
+    sentry_dsn              = "https://dd6355782e894e048723194b237baa39@o115070.ingest.sentry.io/5385534"
+    enmeshed_server_host    = "http://enmeshed-connector-helm-chart"
+    enmeshed_server_secret  = var.enmeshed_api_key
+    enmeshed_webhook_secret = var.enmeshed_api_key
   }
 
   swr_queue_worker = {
     concurrency = 1
   }
+}
+
+module "enmeshed" {
+  source = "github.com/serlo/infrastructure-modules-shared.git//enmeshed?ref=v17.2.0"
+
+  namespace              = kubernetes_namespace.api_namespace.metadata.0.name
+  chart_version          = "3.5.1"
+  transport_base_url     = "https://bkb-nmshd-preprod.nbpdev.de/"
+  platform_client_id     = var.enmeshed_platform_client_id
+  platform_client_secret = var.enmeshed_platform_client_secret
+  api_url                = "https://api.${local.domain}"
+  api_key                = var.enmeshed_api_key
 }
 
 module "api_server_ingress" {
