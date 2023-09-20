@@ -102,3 +102,7 @@ variable "enmeshed_api_key" {
   description = "API key the Enmeshed Connector uses to authenticate requests."
   type        = string
 }
+
+variable "openai_api_key" {
+  type = string
+}
