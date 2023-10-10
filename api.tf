@@ -92,7 +92,7 @@ module "enmeshed" {
 
   namespace              = kubernetes_namespace.api_namespace.metadata.0.name
   chart_version          = "3.5.1"
-  transport_base_url     = "https://bkb-nmshd-preprod.nbpdev.de/"
+  transport_base_url     = "https://nmshd-bkb.demo.meinbildungsraum.de/"
   platform_client_id     = var.enmeshed_platform_client_id
   platform_client_secret = var.enmeshed_platform_client_secret
   api_url                = "https://api.${local.domain}"
