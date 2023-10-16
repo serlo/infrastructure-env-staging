@@ -26,8 +26,7 @@ module "hydra" {
 }
 
 module "kratos" {
-  # TODO: WIP. Change to a tag later
-  source = "github.com/serlo/infrastructure-modules-shared.git//kratos?ref=kratos-newsletter"
+  source = "github.com/serlo/infrastructure-modules-shared.git//kratos?ref=v17.5.0"
 
   namespace          = kubernetes_namespace.auth_namespace.metadata.0.name
   dsn                = "postgres://${local.postgres_database_username_default}:${var.kpi_kpi_database_password_default}@${module.gcloud_postgres.database_private_ip_address}/kratos"
