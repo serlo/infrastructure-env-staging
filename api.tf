@@ -113,6 +113,19 @@ module "api_server_ingress" {
   enable_cors = true
 }
 
+module "enmeshed_ingress" {
+  source = "github.com/serlo/infrastructure-modules-shared.git//ingress?ref=v13.2.0"
+
+  name      = "enmeshed"
+  namespace = kubernetes_namespace.api_namespace.metadata.0.name
+  host      = "enmeshed.${local.domain}"
+  backend = {
+    service_name = "enmeshed-connector-helm-chart"
+    service_port = 80
+  }
+  enable_tls = true
+}
+
 resource "kubernetes_namespace" "api_namespace" {
   metadata {
     name = "api"
