@@ -4,7 +4,7 @@ locals {
       database_layer             = "0.3.72"
       server                     = "0.57.6"
       api_db_migration           = "0.5.0"
-      content_generation_service = "0.2.2"
+      content_generation_service = "0.2.3"
     }
   }
 }
