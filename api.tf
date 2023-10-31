@@ -88,7 +88,7 @@ module "api" {
 }
 
 module "enmeshed" {
-  source = "github.com/serlo/infrastructure-modules-shared.git//enmeshed?ref=v17.6.0"
+  source = "github.com/serlo/infrastructure-modules-shared.git//enmeshed?ref=v17.6.3"
 
   namespace              = kubernetes_namespace.api_namespace.metadata.0.name
   chart_version          = "3.5.1"
