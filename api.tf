@@ -2,7 +2,7 @@ locals {
   api = {
     image_tags = {
       database_layer             = "0.3.72"
-      server                     = "0.57.7-staging.4"
+      server                     = "0.57.7-staging.5"
       api_db_migration           = "0.6.0-staging.4"
       content_generation_service = "0.2.4"
     }
@@ -91,7 +91,7 @@ module "enmeshed" {
   source = "github.com/serlo/infrastructure-modules-shared.git//enmeshed?ref=v17.6.3"
 
   namespace              = kubernetes_namespace.api_namespace.metadata.0.name
-  chart_version          = "3.5.1"
+  chart_version          = "3.5.5"
   transport_base_url     = "https://nmshd-bkb.demo.meinbildungsraum.de/"
   platform_client_id     = var.enmeshed_platform_client_id
   platform_client_secret = var.enmeshed_platform_client_secret
