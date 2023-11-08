@@ -1,9 +1,9 @@
 locals {
   api = {
     image_tags = {
-      database_layer             = "0.3.73-staging.1"
+      database_layer             = "0.3.73"
       server                     = "0.57.7"
-      api_db_migration           = "0.6.0-staging.10"
+      api_db_migration           = "0.6.0"
       content_generation_service = "0.2.5"
     }
   }
