@@ -1,10 +1,9 @@
 locals {
   api = {
     image_tags = {
-      database_layer             = "0.3.73"
-      server                     = "0.58.0"
-      api_db_migration           = "0.7.0"
-      content_generation_service = "1.0.0"
+      database_layer   = "0.3.73"
+      server           = "0.58.0"
+      api_db_migration = "0.7.0"
     }
   }
 }
@@ -19,7 +18,7 @@ module "api_redis" {
 }
 
 module "api" {
-  source = "github.com/serlo/infrastructure-modules-api.git//?ref=v14.0.0"
+  source = "github.com/serlo/infrastructure-modules-api.git//?ref=v14.1.1"
 
   namespace         = kubernetes_namespace.api_namespace.metadata.0.name
   image_tag         = local.api.image_tags.server
@@ -80,11 +79,6 @@ module "api" {
 
   swr_queue_worker = {
     concurrency = 1
-  }
-
-  content_generation_service = {
-    image_tag      = local.api.image_tags.content_generation_service
-    openai_api_key = var.openai_api_key
   }
 }
 
