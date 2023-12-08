@@ -1,0 +1,54 @@
+name: Deployment
+on:
+  # will only trigger a workflow run if the workflow file is on the default branch
+  workflow_dispatch:
+    inputs:
+      image:
+        description: 'Name of service to be deployed'
+        required: true
+        type: string
+      version:
+        description: 'Version tag of the image to be deployed'
+        required: true
+        type: string
+
+jobs:
+  edit-version:
+    name: deployment
+    runs-on: ubuntu-latest
+
+    env:
+      IMAGE: ${{inputs.image}}
+      VERSION: ${{inputs.version}}
+    steps:
+    - uses: actions/checkout@v4
+    - name: Echo variables
+      run: |
+        echo "repository: $IMAGE"
+        echo "image version: $VERSION"
+    - name: Check pwd
+      run: pwd
+    - name: Check what is in pwd
+      run: ls
+    - name: Edit the version tag in Terraform
+      run: sed -i "s/\(${IMAGE}.*=\s*\"[^.]\+\.\)[^\"]*/\1${VERSION}/" api.tf
+    - name: Set authentication via Github token
+      run: git remote set-url --push origin https://serlo:$GITHUB_TOKEN@github.com/serlo/infrastructure-env-staging.git
+      env: 
+        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+    - name: Check change
+      run: git status
+    - name: Stage change
+      run: git add api.tf
+    - name: Commit change
+      run: git commit -m "update version of $IMAGE for staging to $VERSION"
+    - name: Fetch from main
+      run: git fetch origin main
+    - name: Push change
+      run: git push origin HEAD:main
+  deploy: 
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Terraform apply
+        run: echo "todo Terraform apply"
