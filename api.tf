@@ -2,7 +2,7 @@ locals {
   api = {
     image_tags = {
       database_layer   = "0.3.74"
-      server           = "0.60.0"
+      server           = "staging"
       api_db_migration = "0.8.0"
     }
   }
@@ -22,7 +22,7 @@ module "api" {
 
   namespace         = kubernetes_namespace.api_namespace.metadata.0.name
   image_tag         = local.api.image_tags.server
-  image_pull_policy = "IfNotPresent"
+  image_pull_policy = "Always"
   node_pool         = module.cluster.node_pools.non-preemptible
 
   environment = "staging"
