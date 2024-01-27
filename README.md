@@ -1,3 +1,7 @@
+## Deprecation Note:
+This repo is archived in favor of [serlo/infra](https://github.com/serlo/infra)
+--
+
 # Staging-Infrastructure for Serlo
 
 ## Introduction
